@@ -1,0 +1,7 @@
+{
+  "name": "workout-intervals",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
