@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "deploy": "ng build --prod --base-href \"workout-timer\" && ngh --repo=https://github.com/AmineKamal/workout-timer.git --name=\"Amine Kamal\" --email=m.amine.kamal@gmail.com"
+    "deploy": "ng build --prod -- --base-href https://amineKamal.github.io/workout-timer && ngh --repo=https://github.com/AmineKamal/workout-timer.git --name=\"Amine Kamal\" --email=m.amine.kamal@gmail.com --dir=www"
   },
   "private": true,
   "dependencies": {
