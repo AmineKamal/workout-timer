@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1608410632538,
+  "timestamp": 1608410743662,
   "index": "https://amineKamal.github.io/workout-timer/index.html",
   "assetGroups": [
     {
@@ -13,8 +13,8 @@
       "urls": [
         "https://amineKamal.github.io/workout-timer/11-es2015.36375591259d29bcd517.js",
         "https://amineKamal.github.io/workout-timer/11-es5.36375591259d29bcd517.js",
-        "https://amineKamal.github.io/workout-timer/12-es2015.fbd8270d25b4caf3c4a8.js",
-        "https://amineKamal.github.io/workout-timer/12-es5.fbd8270d25b4caf3c4a8.js",
+        "https://amineKamal.github.io/workout-timer/12-es2015.15ab575d5be55f48eb5b.js",
+        "https://amineKamal.github.io/workout-timer/12-es5.15ab575d5be55f48eb5b.js",
         "https://amineKamal.github.io/workout-timer/13-es2015.d659b3ad8a7b1d7e85c3.js",
         "https://amineKamal.github.io/workout-timer/13-es5.d659b3ad8a7b1d7e85c3.js",
         "https://amineKamal.github.io/workout-timer/14-es2015.c51d608ed747e8048973.js",
@@ -29,8 +29,8 @@
         "https://amineKamal.github.io/workout-timer/18-es5.4d2c68fbc28b50deb7cd.js",
         "https://amineKamal.github.io/workout-timer/19-es2015.fcb85bb532ba9be56ea5.js",
         "https://amineKamal.github.io/workout-timer/19-es5.fcb85bb532ba9be56ea5.js",
-        "https://amineKamal.github.io/workout-timer/2-es2015.757d38e3fe811f4e188b.js",
-        "https://amineKamal.github.io/workout-timer/2-es5.757d38e3fe811f4e188b.js",
+        "https://amineKamal.github.io/workout-timer/2-es2015.5514e495d67383a69a98.js",
+        "https://amineKamal.github.io/workout-timer/2-es5.5514e495d67383a69a98.js",
         "https://amineKamal.github.io/workout-timer/20-es2015.5d662b75ee53b3d4b795.js",
         "https://amineKamal.github.io/workout-timer/20-es5.5d662b75ee53b3d4b795.js",
         "https://amineKamal.github.io/workout-timer/21-es2015.d9443b1b824e6750537b.js",
@@ -133,8 +133,8 @@
         "https://amineKamal.github.io/workout-timer/polyfills-dom-es5.cf9c2eaf3c5b3e278ab8.js",
         "https://amineKamal.github.io/workout-timer/polyfills-es2015.048fb8854c66c2bbd96e.js",
         "https://amineKamal.github.io/workout-timer/polyfills-es5.05f6c52f912073533556.js",
-        "https://amineKamal.github.io/workout-timer/runtime-es2015.d0705e4e61f6d08be634.js",
-        "https://amineKamal.github.io/workout-timer/runtime-es5.d0705e4e61f6d08be634.js",
+        "https://amineKamal.github.io/workout-timer/runtime-es2015.434a2a1be1e556660c71.js",
+        "https://amineKamal.github.io/workout-timer/runtime-es5.434a2a1be1e556660c71.js",
         "https://amineKamal.github.io/workout-timer/styles.fe3084a420b9c5186e3a.css"
       ],
       "patterns": []
@@ -180,8 +180,8 @@
   "hashTable": {
     "https://amineKamal.github.io/workout-timer/11-es2015.36375591259d29bcd517.js": "31c7f8eb652e9f41078a50d82c21c6928c5aca84",
     "https://amineKamal.github.io/workout-timer/11-es5.36375591259d29bcd517.js": "e4cc296ddb5220ccf3583be978ad099436305fc0",
-    "https://amineKamal.github.io/workout-timer/12-es2015.fbd8270d25b4caf3c4a8.js": "55c0609e952320fca9ef9ffdefb574a4e908c00a",
-    "https://amineKamal.github.io/workout-timer/12-es5.fbd8270d25b4caf3c4a8.js": "1e27b816f9164323dec9ce46841a558d2321fae0",
+    "https://amineKamal.github.io/workout-timer/12-es2015.15ab575d5be55f48eb5b.js": "e91d40646df00fd35c43f54f1e5710d649ede609",
+    "https://amineKamal.github.io/workout-timer/12-es5.15ab575d5be55f48eb5b.js": "6eded13e51f33e2206cbb9b8d83639888588262a",
     "https://amineKamal.github.io/workout-timer/13-es2015.d659b3ad8a7b1d7e85c3.js": "22e8480d25cad0476a29c0f1a980b122fc0a25c8",
     "https://amineKamal.github.io/workout-timer/13-es5.d659b3ad8a7b1d7e85c3.js": "e1ad9b31934a00c4f47b9d7b06df38dc08b120ae",
     "https://amineKamal.github.io/workout-timer/14-es2015.c51d608ed747e8048973.js": "46ac94a68d3629b2d064ec86d8519ef4dc26658d",
@@ -196,8 +196,8 @@
     "https://amineKamal.github.io/workout-timer/18-es5.4d2c68fbc28b50deb7cd.js": "2105aec1b21b864c728fb728547bf3918ae21de7",
     "https://amineKamal.github.io/workout-timer/19-es2015.fcb85bb532ba9be56ea5.js": "cb2f31206ab3d472c40a026ae15fa35bab05b15d",
     "https://amineKamal.github.io/workout-timer/19-es5.fcb85bb532ba9be56ea5.js": "cccfd519a79cfb9500ef820c699f0661c252b7da",
-    "https://amineKamal.github.io/workout-timer/2-es2015.757d38e3fe811f4e188b.js": "15d19bc15c56769729404e4c266f2f86aeea0b59",
-    "https://amineKamal.github.io/workout-timer/2-es5.757d38e3fe811f4e188b.js": "6e05cabbd70daaba4d34dfaf26506ff9f6dada69",
+    "https://amineKamal.github.io/workout-timer/2-es2015.5514e495d67383a69a98.js": "d4a30ac6c43bb76ec22b8742392f951d960b67b5",
+    "https://amineKamal.github.io/workout-timer/2-es5.5514e495d67383a69a98.js": "857d5393a25132f0e85fb6c389cd9bca97b92939",
     "https://amineKamal.github.io/workout-timer/20-es2015.5d662b75ee53b3d4b795.js": "9d179f1e1b6cec33a397b72225f99875c7f2901d",
     "https://amineKamal.github.io/workout-timer/20-es5.5d662b75ee53b3d4b795.js": "726a2000820d1b28d4aaeee0527ec6c2634a5b43",
     "https://amineKamal.github.io/workout-timer/21-es2015.d9443b1b824e6750537b.js": "4e2707a6ae9e39dc3a4ab0895038b97e4821dbcb",
@@ -313,7 +313,7 @@
     "https://amineKamal.github.io/workout-timer/assets/sounds/whistle.mp3": "1ec3ee5611f4291ab88494baab8eb78614afb78b",
     "https://amineKamal.github.io/workout-timer/common-es2015.32207e7603ff9baca653.js": "2f2a9e1c4ba95727ec22da6ac5f2c8b6e68ccffb",
     "https://amineKamal.github.io/workout-timer/common-es5.32207e7603ff9baca653.js": "4f3ec71898590d4259328964232458978f73b5b2",
-    "https://amineKamal.github.io/workout-timer/index.html": "57dfc42a95d13bf37f0434b39cb5cce0b37c06ed",
+    "https://amineKamal.github.io/workout-timer/index.html": "cd6bea9643bcc83917714eaaa94df41b50d3a2d4",
     "https://amineKamal.github.io/workout-timer/main-es2015.ebe3589764fa288552d0.js": "cfa207e32900580031bae33bdcfa48ad3afd2d01",
     "https://amineKamal.github.io/workout-timer/main-es5.ebe3589764fa288552d0.js": "0cb5a8da8c69bb17b32468f2dece7b0989be8768",
     "https://amineKamal.github.io/workout-timer/manifest.webmanifest": "9a088b7c4339228d1082e666ce105dc889bc180c",
@@ -325,8 +325,8 @@
     "https://amineKamal.github.io/workout-timer/polyfills-dom-es5.cf9c2eaf3c5b3e278ab8.js": "808e75689d96221d3a57bce76dd16974fc1d4929",
     "https://amineKamal.github.io/workout-timer/polyfills-es2015.048fb8854c66c2bbd96e.js": "4de571922adde5bdc4ea2945f7267909dcc4ce25",
     "https://amineKamal.github.io/workout-timer/polyfills-es5.05f6c52f912073533556.js": "d11abab8dd3c6d26400e4b4fb862ba9d0248269f",
-    "https://amineKamal.github.io/workout-timer/runtime-es2015.d0705e4e61f6d08be634.js": "e8bba4e37994a95ea7e5d97a2b1798019d6b9a8a",
-    "https://amineKamal.github.io/workout-timer/runtime-es5.d0705e4e61f6d08be634.js": "b24347037ab04af5ba8ed9f23297f5d8bf260069",
+    "https://amineKamal.github.io/workout-timer/runtime-es2015.434a2a1be1e556660c71.js": "7f08b238c46a66acd7fe8ad33450e22ab311777f",
+    "https://amineKamal.github.io/workout-timer/runtime-es5.434a2a1be1e556660c71.js": "a6a8014cae1c6a3780a4183664ba5c3bfe59c8ee",
     "https://amineKamal.github.io/workout-timer/styles.fe3084a420b9c5186e3a.css": "126bf7af21d9cb5558ac04bd960efb0f7ba78b67"
   },
   "navigationUrls": [
