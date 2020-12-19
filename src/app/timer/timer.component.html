@@ -1,0 +1,42 @@
+<ion-header>
+	<ion-toolbar [color]="color">
+		<ion-buttons slot="start">
+			<ion-button (click)="goBack()">
+				<ion-icon name="arrow-back-outline"></ion-icon>
+			</ion-button>
+		</ion-buttons>
+		<ion-buttons slot="primary">
+			<ion-button (click)="toggle()">
+				<ion-icon *ngIf="state==='active'" name="pause-outline"></ion-icon>
+				<ion-icon *ngIf="state==='paused'" name="play-outline"></ion-icon>
+			</ion-button>
+		</ion-buttons>
+		<ion-title>{{ exercice.name }}</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<ion-card>
+		<ion-toolbar [color]="color">
+			<ion-title>{{currentElement | uppercase}}</ion-title>
+		</ion-toolbar>
+
+		<circle-progress [percent]="percent" [title]="time" [outerStrokeColor]="hexColor"
+			[outerStrokeGradientStopColor]="hexColor" [titleColor]="hexColor">
+		</circle-progress>
+
+		<ion-toolbar [color]="color">
+			<div style="width:100%; display:flex; justify-content: space-around; align-items: center; height: 100%;">
+				<div style="display:flex; flex-direction: column; align-items:center">
+					<span class="info-title">Elapsed</span><span class='info-data'>{{elapsed}}</span>
+				</div>
+				<div style="display:flex; flex-direction: column;align-items:center">
+					<span class="info-title">Intervals</span><span class="info-data">{{intervals}}</span>
+				</div>
+				<div style="display:flex; flex-direction: column;align-items:center">
+					<span class="info-title">Remaining</span><span class="info-data">{{remaining}}</span>
+				</div>
+			</div>
+		</ion-toolbar>
+	</ion-card>
+</ion-content>
