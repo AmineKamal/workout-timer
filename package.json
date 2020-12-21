@@ -11,7 +11,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "predeploy": "ng build --prod -- --base-href https://amineKamal.github.io/workout-timer/",
-    "deploy": "npx angular-cli-ghpages --dir=www --repo=https://github.com/AmineKamal/resume.git --name=\"Amine Kamal\" --email=m.amine.kamal@gmail.com"
+    "deploy": "npx angular-cli-ghpages --dir=www --repo=https://github.com/AmineKamal/workout-timer.git --name=\"Amine Kamal\" --email=m.amine.kamal@gmail.com"
   },
   "private": true,
   "dependencies": {
