@@ -67,7 +67,7 @@ export class TimerComponent implements OnInit {
     this.elapsedTime = 0;
     this.remainingTime = this.exercice.totalTime;
     this.timer = new Timer(this.precision);
-    this.timer.on([3000, 2000, 1000], () => Sounds.beep.play());
+    this.timer.on([3100, 2100, 1100], () => Sounds.beep.play());
     this.timer.subscribe(time => this.update(time));
 
     const [, , , cycles] = this.exercice.elements.map(extract('value'));
