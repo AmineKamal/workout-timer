@@ -5,7 +5,7 @@ import {
     ActivatedRouteSnapshot,
     RouterStateSnapshot
 } from '@angular/router';
-import { State } from 'src/utils/state';
+import { State } from 'src/services/state';
 
 @Injectable()
 export class Guard implements CanActivate {

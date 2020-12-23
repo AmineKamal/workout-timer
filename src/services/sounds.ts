@@ -1,5 +1,5 @@
 import { Howl } from 'howler';
-import { StrictMap } from './types';
+import { StrictMap } from '../utils/types';
 
 const SOUNDS = ['beep', 'whistle', 'ding', 'boxingSound'] as const;
 type SoundKey = typeof SOUNDS[number];

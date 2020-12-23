@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Sounds } from 'src/utils/sounds';
-import { State } from 'src/utils/state';
+import { Sounds } from 'src/services/sounds';
+import { State } from 'src/services/state';
 
 @Component({
   selector: 'app-loading',

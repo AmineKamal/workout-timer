@@ -5,7 +5,7 @@ import {
   OnInit
 } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { Sounds } from 'src/utils/sounds';
+import { Sounds } from 'src/services/sounds';
 import { extract } from '../../utils/object';
 import { pad, toTime } from '../../utils/string';
 import { TimerComponent } from '../timer/timer.component';
@@ -43,6 +43,7 @@ export class HomePage implements OnInit {
   private totalTime: number;
   public time = '04:00';
   public intervals = 16;
+  public exerciceName = 'Exercice';
 
   constructor(
     public modalController: ModalController,
@@ -79,7 +80,7 @@ export class HomePage implements OnInit {
 
   private createExercice(): Exercice {
     return {
-      name: 'Exercice',
+      name: this.exerciceName,
       elements: this.elements,
       totalTime: this.totalTime * 1000
     };

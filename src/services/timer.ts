@@ -1,4 +1,4 @@
-import { gte } from './number';
+import { gte } from '../utils/number';
 
 type Action<I, O> = (input: I) => O;
 

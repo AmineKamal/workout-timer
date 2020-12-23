@@ -9,10 +9,9 @@ import { multiplier } from '../../utils/number';
 import { extract } from '../../utils/object';
 import { toFraction, toTime } from '../../utils/string';
 import { getHex } from '../../utils/style';
-import { Timer } from '../../utils/timer';
+import { Timer } from '../../services/timer';
 import { Exercice } from '../home/home.page';
-import { Howl } from 'howler';
-import { Sounds } from 'src/utils/sounds';
+import { Sounds } from 'src/services/sounds';
 
 @Component({
   selector: 'app-timer',
@@ -21,30 +20,6 @@ import { Sounds } from 'src/utils/sounds';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimerComponent implements OnInit {
-
-  public get color() {
-    if (this.currentElement === 'work') {
-      return 'danger';
-    }
-
-    if (this.currentElement === 'rest') {
-      return 'primary';
-    }
-
-    if (this.currentElement === 'restSets') {
-      return 'secondary';
-    }
-
-    if (this.currentElement === 'finish') {
-      return 'tertiary';
-    }
-
-    return 'success';
-  }
-
-  public get hexColor() {
-    return getHex(this.color);
-  }
 
   constructor(private changeDetectorRef: ChangeDetectorRef) {}
   @Input() back: () => void;
@@ -69,6 +44,30 @@ export class TimerComponent implements OnInit {
   public currentElement: 'prepare' | 'work' | 'rest' | 'restSets'| 'finish';
   public intervals = '00/00';
   public sets = '00/00';
+
+  public get color() {
+    if (this.currentElement === 'work') {
+      return 'danger';
+    }
+
+    if (this.currentElement === 'rest') {
+      return 'primary';
+    }
+
+    if (this.currentElement === 'restSets') {
+      return 'secondary';
+    }
+
+    if (this.currentElement === 'finish') {
+      return 'tertiary';
+    }
+
+    return 'success';
+  }
+
+  public get hexColor() {
+    return getHex(this.color);
+  }
 
   async ngOnInit() {
     this.initTimer();
