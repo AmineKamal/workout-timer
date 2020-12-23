@@ -69,6 +69,10 @@ export class TimerComponent implements OnInit {
     return getHex(this.color);
   }
 
+  public get elementTitle() {
+    return this.currentElement === 'restSets' ? 'Rest Set' : this.currentElement;
+  }
+
   async ngOnInit() {
     this.initTimer();
     await this.run();
@@ -114,11 +118,9 @@ export class TimerComponent implements OnInit {
   }
 
   private async run() {
-    const [prepare, work, rest, , , restSets] = this.exercice.elements
-      .map(extract('value'))
-      .map(multiplier(1000));
-
-    const [, , , cycles, sets] = this.exercice.elements.map(extract('value'));
+    const values = this.exercice.elements.map(extract('value'));
+    const [prepare, work, rest, , , restSets] = values.map(multiplier(1000));
+    const [, , , cycles, sets] = values;
 
     try { await this.start([prepare, work, rest, cycles, sets, restSets]); }
     catch { return; }
