@@ -1,6 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
 
-const PAGES = ['home', 'quick-Workout'] as const;
+const PAGES = ['home', 'quick-workout'] as const;
 export type Page = typeof PAGES[number];
 
 export const State = new class
