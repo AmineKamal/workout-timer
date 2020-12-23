@@ -5,12 +5,12 @@ import {
   Input,
   OnInit
 } from '@angular/core';
-import { multiplier } from '../../utils/number';
-import { extract } from '../../utils/object';
-import { toFraction, toTime } from '../../utils/string';
-import { getHex } from '../../utils/style';
-import { Timer } from '../../services/timer';
-import { Exercice } from '../home/home.page';
+import { multiplier } from '../../../utils/number';
+import { extract } from '../../../utils/object';
+import { toFraction, toTime } from '../../../utils/string';
+import { getHex } from '../../../utils/style';
+import { Timer } from '../../../services/timer';
+import { Exercice } from '../exercice-creator/exercice-creator.component';
 import { Sounds } from 'src/services/sounds';
 
 @Component({

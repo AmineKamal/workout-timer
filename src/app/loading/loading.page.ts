@@ -14,8 +14,8 @@ export class LoadingPage implements OnInit {
 
   async ngOnInit() {
     await Sounds.load();
+    State.loaded.next(true);
     this.router.navigate(['home']);
-    State.loaded = true;
   }
 
 }

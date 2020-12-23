@@ -15,7 +15,7 @@ export class Guard implements CanActivate {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ) {
-        if (!State.loaded) {
+        if (!State.loaded.value) {
             this.router.navigate(['loading']);
             return false;
         }

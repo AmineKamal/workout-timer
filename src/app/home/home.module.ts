@@ -5,9 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
-import { TimerComponent } from '../timer/timer.component';
+import { TimerComponent } from '../components/timer/timer.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { AdsenseModule } from 'ng2-adsense';
+import { ExerciceCreatorComponent } from '../components/exercice-creator/exercice-creator.component';
+import { ComponentsModule } from '../components/components.module';
 
 @NgModule({
   imports: [
@@ -15,33 +17,12 @@ import { AdsenseModule } from 'ng2-adsense';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
+    ComponentsModule,
     AdsenseModule.forRoot({
       adtest: 'on'
     }),
-    NgCircleProgressModule.forRoot({
-      radius: 160,
-      space: -10,
-      maxPercent: 100,
-      outerStrokeGradient: true,
-      outerStrokeWidth: 10,
-      outerStrokeColor: '#4882c2',
-      outerStrokeGradientStopColor: '#53a9ff',
-      innerStrokeColor: '#e7e8ea',
-      innerStrokeWidth: 10,
-      title: '',
-      subtitle: '',
-      titleFontSize: '92',
-      subtitleFontSize: '49',
-      animateTitle: false,
-      animation: false,
-      animationDuration: 500,
-      showUnits: false,
-      showBackground: false,
-      clockwise: false,
-      showSubtitle: false
-    })
   ],
-  entryComponents: [TimerComponent],
-  declarations: [HomePage, TimerComponent]
+  entryComponents: [],
+  declarations: [HomePage]
 })
 export class HomePageModule {}

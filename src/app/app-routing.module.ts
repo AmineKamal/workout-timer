@@ -17,6 +17,11 @@ const routes: Routes = [
     path: 'loading',
     loadChildren: () => import('./loading/loading.module').then( m => m.LoadingPageModule)
   },
+  {
+    path: 'quick-workout',
+    loadChildren: () => import('./quick-workout/quick-workout.module').then( m => m.QuickWorkoutPageModule),
+    canActivate: [Guard]
+  },
 ];
 
 @NgModule({
