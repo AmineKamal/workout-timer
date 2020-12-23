@@ -30,11 +30,14 @@ export interface Exercice {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomePage implements OnInit {
-  public readonly elements: WorkoutSettingElement[] = [
+  public readonly elements: WorkoutSettingElement[] =
+  [
     { title: 'Prepare', value: 10, icon: 'accessibility-outline', unit: 's' },
     { title: 'Work', value: 20, icon: 'barbell-outline', unit: 's' },
     { title: 'Rest', value: 10, icon: 'bed-outline', unit: 's' },
-    { title: 'Cycles', value: 8, icon: 'repeat-outline' }
+    { title: 'Cycles', value: 8, icon: 'sync-outline' },
+    { title: 'Sets', value: 1, icon: 'repeat-outline' },
+    { title: 'Rest Between Sets', value: 10, icon: 'time-outline', unit: 's' }
   ];
 
   private totalTime: number;
@@ -83,13 +86,15 @@ export class HomePage implements OnInit {
   }
 
   private update() {
-    const [prepare, work, rest, cycles] = this.elements.map(extract('value'));
-    this.totalTime = prepare;
-    this.totalTime += work * cycles;
+    const [prepare, work, rest, cycles, sets, restSets] = this.elements.map(extract('value'));
+    this.totalTime = work * cycles;
     this.totalTime += rest * (cycles - 1);
+    this.totalTime *= sets;
+    this.totalTime += restSets * (sets - 1);
+    this.totalTime += prepare;
 
     this.time = toTime(this.totalTime);
-    this.intervals = cycles;
+    this.intervals = cycles * sets;
     this.changeDetectorRef.detectChanges();
   }
 }

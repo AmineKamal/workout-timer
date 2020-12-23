@@ -107,13 +107,3 @@ class TimerCallback {
     this.locked = false;
   }
 }
-
-export class PresetTimer extends Timer {
-  public constructor(private time: number, precision = 1000) {
-    super(precision);
-  }
-
-  public async start() {
-    await super.start(this.time);
-  }
-}

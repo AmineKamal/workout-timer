@@ -6,6 +6,12 @@ export function getHex(color: string) {
     case 'danger':
       return '#ca0b00';
 
+    case 'tertiary':
+      return '#5260ff';
+
+    case 'secondary':
+      return '#3dc2ff';
+
     default:
       return '#488aff';
   }

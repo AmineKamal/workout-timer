@@ -30,6 +30,9 @@
 				<div style="display:flex; flex-direction: column; align-items:center">
 					<span class="info-title">Elapsed</span><span class='info-data'>{{elapsed}}</span>
 				</div>
+				<div style="display:flex; flex-direction: column;align-items:center" *ngIf="totalSets > 1">
+					<span class="info-title">Sets</span><span class="info-data">{{sets}}</span>
+				</div>
 				<div style="display:flex; flex-direction: column;align-items:center">
 					<span class="info-title">Intervals</span><span class="info-data">{{intervals}}</span>
 				</div>

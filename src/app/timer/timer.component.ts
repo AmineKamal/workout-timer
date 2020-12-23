@@ -21,25 +21,6 @@ import { Sounds } from 'src/utils/sounds';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimerComponent implements OnInit {
-  @Input() back: () => void;
-  @Input() exercice: Exercice;
-
-  private readonly precision = 50;
-
-  private timer: Timer;
-  private currentDuration: number;
-  private elapsedTime: number;
-  private remainingTime: number;
-  private totalIntervals: number;
-  private currentInterval: number;
-
-  public remaining = '00:00';
-  public elapsed = '00:00';
-  public time = '00:00';
-  public state: 'paused' | 'active' = 'active';
-  public percent: number;
-  public currentElement: 'prepare' | 'work' | 'rest' | 'finish';
-  public intervals = '00/00';
 
   public get color() {
     if (this.currentElement === 'work') {
@@ -48,6 +29,10 @@ export class TimerComponent implements OnInit {
 
     if (this.currentElement === 'rest') {
       return 'primary';
+    }
+
+    if (this.currentElement === 'restSets') {
+      return 'secondary';
     }
 
     if (this.currentElement === 'finish') {
@@ -62,19 +47,33 @@ export class TimerComponent implements OnInit {
   }
 
   constructor(private changeDetectorRef: ChangeDetectorRef) {}
+  @Input() back: () => void;
+  @Input() exercice: Exercice;
+
+  private readonly precision = 50;
+
+  private timer: Timer;
+  private currentDuration: number;
+  private elapsedTime: number;
+  private remainingTime: number;
+  private totalIntervals: number;
+  private currentInterval: number;
+  private currentSet: number;
+
+  public totalSets = 1;
+  public remaining = '00:00';
+  public elapsed = '00:00';
+  public time = '00:00';
+  public state: 'paused' | 'active' = 'active';
+  public percent: number;
+  public currentElement: 'prepare' | 'work' | 'rest' | 'restSets'| 'finish';
+  public intervals = '00/00';
+  public sets = '00/00';
 
   async ngOnInit() {
-    this.elapsedTime = 0;
-    this.remainingTime = this.exercice.totalTime;
-    this.timer = new Timer(this.precision);
-    this.timer.on([3100, 2100, 1100], () => Sounds.beep.play());
-    this.timer.subscribe(time => this.update(time));
+    this.initTimer();
+    await this.run();
 
-    const [, , , cycles] = this.exercice.elements.map(extract('value'));
-    this.totalIntervals = cycles;
-    this.currentInterval = 1;
-
-    await this.start();
     this.currentElement = 'finish';
     this.changeDetectorRef.detectChanges();
   }
@@ -99,44 +98,81 @@ export class TimerComponent implements OnInit {
     this.state = 'active';
   }
 
-  private async start() {
-    const [prepare, work, rest] = this.exercice.elements
+  private initTimer()
+  {
+    this.elapsedTime = 0;
+    this.remainingTime = this.exercice.totalTime;
+
+    this.timer = new Timer(this.precision);
+    this.timer.on([3000, 2000, 1000], () => Sounds.play('beep'));
+    this.timer.subscribe(time => this.update(time));
+
+    const [, , , cycles, sets] = this.exercice.elements.map(extract('value'));
+    this.totalIntervals = cycles;
+    this.currentInterval = 1;
+    this.totalSets = sets;
+    this.currentSet = 1;
+  }
+
+  private async run() {
+    const [prepare, work, rest, , , restSets] = this.exercice.elements
       .map(extract('value'))
       .map(multiplier(1000));
 
-    const [, , , cycles] = this.exercice.elements.map(extract('value'));
+    const [, , , cycles, sets] = this.exercice.elements.map(extract('value'));
 
-    try {
-      await this.set(prepare, 'prepare');
-      for (let i = 0; i < cycles; i++) {
-        Sounds.whistle.play();
-        await this.set(work, 'work');
-        if (i < cycles - 1)
-        {
-          Sounds.ding.play();
-          await this.set(rest, 'rest');
-        }
-      }
-    } catch {}
+    try { await this.start([prepare, work, rest, cycles, sets, restSets]); }
+    catch { return; }
 
-    Sounds.boxingSound.play();
+    Sounds.play('boxingSound');
   }
 
-  private async set(time: number, type: 'prepare' | 'work' | 'rest') {
+  private async start([prepare, work, rest, cycles, sets, restSets]: number[])
+  {
+    await this.set(prepare, 'prepare');
+
+    for (let set = 1; set <= sets; set++)
+    {
+      for (let cycle = 1; cycle <= cycles; cycle++)
+      {
+        Sounds.play('whistle');
+        await this.set(work, 'work');
+
+        if (cycle < cycles)
+        {
+          Sounds.play('ding');
+          await this.set(rest, 'rest');
+          this.currentInterval++;
+        }
+      }
+
+      if (set < sets)
+      {
+        Sounds.play('ding');
+        await this.set(restSets, 'restSets');
+      }
+
+      this.currentInterval = 1;
+      this.currentSet++;
+    }
+  }
+
+  private async set(time: number, type: 'prepare' | 'work' | 'rest' | 'restSets') {
+    if (time <= 0) { return; }
+
     this.currentDuration = time / 1000;
     this.currentElement = type;
     await this.timer.start(time);
-
-    if (type === 'work') { this.currentInterval++; }
   }
 
   private update(time: number) {
     this.elapsedTime += this.precision;
     this.remainingTime -= this.precision;
     this.intervals = toFraction(this.currentInterval, this.totalIntervals);
-    this.elapsed = toTime(Math.round(this.elapsedTime / 1000));
-    this.remaining = toTime(Math.round(this.remainingTime / 1000));
-    this.time = toTime(Math.round(time));
+    this.sets = toFraction(this.currentSet, this.totalSets);
+    this.elapsed = toTime(Math.floor(this.elapsedTime / 1000));
+    this.remaining = toTime(Math.ceil(this.remainingTime / 1000));
+    this.time = toTime(Math.ceil(time));
     this.percent = (time / this.currentDuration) * 100;
     this.changeDetectorRef.detectChanges();
   }
