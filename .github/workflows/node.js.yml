@@ -18,9 +18,10 @@ jobs:
           node-version: "12.x"
       - run: npm install
       - run: npm run deploy
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: rymndhng/release-on-push-action@master
         with:
           bump_version_scheme: minor
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
