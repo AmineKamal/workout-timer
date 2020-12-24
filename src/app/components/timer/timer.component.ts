@@ -114,7 +114,7 @@ export class TimerComponent implements OnInit {
   private initTimer()
   {
     this.timer = new Timer(this.precision);
-    this.timer.on([3000, 2000, 1000], () => Sounds.play('beep'));
+    this.timer.on([3000, 2000, 1000], () => Sounds.play('short-beep'));
     this.timer.subscribe(time => this.update(time));
 
     const [, , , cycles, sets] = this.exercice.elements.map(extract('value'));
@@ -132,7 +132,7 @@ export class TimerComponent implements OnInit {
     try { await this.start([prepare, work, rest, cycles, sets, restSets]); }
     catch { return; }
 
-    Sounds.play('boxingSound');
+    Sounds.play('boxing-bell');
   }
 
   private async start([prepare, work, rest, cycles, sets, restSets]: number[])
@@ -148,7 +148,7 @@ export class TimerComponent implements OnInit {
 
         if (cycle < cycles)
         {
-          Sounds.play('ding');
+          Sounds.play('ding-sound');
           await this.set(rest, 'rest');
           this.currentInterval++;
         }
@@ -156,7 +156,7 @@ export class TimerComponent implements OnInit {
 
       if (set < sets)
       {
-        Sounds.play('ding');
+        Sounds.play('ding-sound');
         await this.set(restSets, 'restSets');
       }
 

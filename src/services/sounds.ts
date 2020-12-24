@@ -1,36 +1,47 @@
-import { Howl, Howler } from 'howler';
-import { StrictMap } from '../utils/types';
+import { Howl } from 'howler';
 
-const SOUNDS = ['beep', 'whistle', 'ding', 'boxingSound'] as const;
+const SOUNDS = ['short-beep', 'whistle', 'ding-sound', 'boxing-bell', 'countdown'] as const;
 type SoundKey = typeof SOUNDS[number];
 
-const createHowlerSounds: () => StrictMap<SoundKey, Howl> = () =>
+const createSound: () => Howl = () =>
 {
-    return {
-        beep: new Howl({ src: 'assets/sounds/short-beep.mp3', html5: true }),
-        whistle: new Howl({ src: 'assets/sounds/whistle.mp3', html5: true }),
-        ding: new Howl({ src: 'assets/sounds/ding-sound.mp3', html5: true }),
-        boxingSound: new Howl({ src: 'assets/sounds/boxing-bell.mp3', html5: true})
-    };
+    return new Howl(
+    {
+        src:
+        [
+          'assets/sounds/sounds.ogg',
+          'assets/sounds/sounds.m4a',
+          'assets/sounds/sounds.mp3',
+          'assets/sounds/sounds.ac3'
+        ],
+        sprite:
+        {
+          'boxing-bell': [0, 8249.04761904762],
+          countdown: [10000, 5476.213151927437],
+          'ding-sound': [17000, 2951.8367346938776],
+          'short-beep': [21000, 261.224489795918],
+          whistle: [23000, 1226.5986394557835]
+        }
+      });
 };
+
 
 export const Sounds = new class
 {
-    private sounds: StrictMap<SoundKey, Howl>;
+    private sound: Howl;
     private muted = false;
 
     public async play(sound: SoundKey)
     {
         if (this.muted) { return; }
-        await this.stopAll();
-        this.sounds[sound].play();
+        this.sound.play(sound);
     }
 
     public async load()
     {
+        this.sound = createSound();
+        this.sound.play();
         console.log('Sounds have been enabled');
-        this.sounds = createHowlerSounds();
-        await Promise.all(SOUNDS.map(s => this.preload(this.sounds[s])));
     }
 
     public mute()
@@ -41,19 +52,6 @@ export const Sounds = new class
     public unmute()
     {
         this.muted = false;
-    }
-
-    private async stopAll()
-    {
-        await Promise.all(SOUNDS.map((s) => this.sounds[s].stop()));
-    }
-
-    private preload(sound: Howl)
-    {
-        return new Promise<void>((resolve) => {
-            sound.load();
-            sound.on('load', resolve);
-        });
     }
 }
 ();
