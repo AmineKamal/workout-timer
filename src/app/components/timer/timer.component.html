@@ -6,40 +6,54 @@
 			</ion-button>
 		</ion-buttons>
 		<ion-buttons slot="primary">
-			<ion-button (click)="toggle()">
-				<ion-icon *ngIf="state==='active'" name="pause-outline"></ion-icon>
-				<ion-icon *ngIf="state==='paused'" name="play-outline"></ion-icon>
+			<ion-button>
+				<ion-icon name="refresh-outline"></ion-icon>
 			</ion-button>
 		</ion-buttons>
 		<ion-title>{{ exercice.name }}</ion-title>
 	</ion-toolbar>
+	<ion-toolbar [color]="color" style="border-top: solid white 1px;">
+		<ion-title>{{elementTitle | uppercase}}</ion-title>
+	</ion-toolbar>
 </ion-header>
 
 <ion-content>
-	<ion-card>
-		<ion-toolbar [color]="color">
-			<ion-title>{{elementTitle | uppercase}}</ion-title>
-		</ion-toolbar>
-
+	<div style="display: flex; width: 100%;height:100%;justify-content: center;align-items: center;">
 		<circle-progress [percent]="percent" [title]="time" [outerStrokeColor]="hexColor"
 			[outerStrokeGradientStopColor]="hexColor" [titleColor]="hexColor">
 		</circle-progress>
-
-		<ion-toolbar [color]="color">
-			<div style="width:100%; display:flex; justify-content: space-around; align-items: center; height: 100%;">
-				<div style="display:flex; flex-direction: column; align-items:center">
-					<span class="info-title">Elapsed</span><span class='info-data'>{{elapsed}}</span>
-				</div>
-				<div style="display:flex; flex-direction: column;align-items:center" *ngIf="totalSets > 1">
-					<span class="info-title">Sets</span><span class="info-data">{{sets}}</span>
-				</div>
-				<div style="display:flex; flex-direction: column;align-items:center">
-					<span class="info-title">Intervals</span><span class="info-data">{{intervals}}</span>
-				</div>
-				<div style="display:flex; flex-direction: column;align-items:center">
-					<span class="info-title">Remaining</span><span class="info-data">{{remaining}}</span>
-				</div>
-			</div>
-		</ion-toolbar>
-	</ion-card>
+	</div>
 </ion-content>
+
+<ion-footer>
+	<ion-tab-bar [color]="color" style="border-bottom: solid white 1px;">
+		<ion-tab-button selected="true" (click)="previous()" [disabled]="currentElement === 'finish'">
+		  <ion-icon name="play-skip-back-outline"></ion-icon>
+		</ion-tab-button>
+	  
+		<ion-tab-button (click)="toggle()" selected="true" [disabled]="currentElement === 'finish'">
+			<ion-icon *ngIf="state==='active'" name="pause-outline"></ion-icon>
+			<ion-icon *ngIf="state==='paused'" name="play-outline"></ion-icon>
+		</ion-tab-button>
+	  
+		<ion-tab-button selected="true" (click)="next()" [disabled]="currentElement === 'finish'">
+		  <ion-icon name="play-skip-forward-outline"></ion-icon>
+		</ion-tab-button>
+	</ion-tab-bar>
+	<ion-toolbar [color]="color">
+		<div style="width:100%; display:flex; justify-content: space-around; align-items: center; height: 100%;padding-top: 5px;">
+			<div style="display:flex; flex-direction: column; align-items:center">
+				<span class="info-title">Elapsed</span><span class='info-data'>{{elapsed}}</span>
+			</div>
+			<div style="display:flex; flex-direction: column;align-items:center" *ngIf="totalSets > 1">
+				<span class="info-title">Sets</span><span class="info-data">{{sets}}</span>
+			</div>
+			<div style="display:flex; flex-direction: column;align-items:center">
+				<span class="info-title">Intervals</span><span class="info-data">{{intervals}}</span>
+			</div>
+			<div style="display:flex; flex-direction: column;align-items:center">
+				<span class="info-title">Remaining</span><span class="info-data">{{remaining}}</span>
+			</div>
+		</div>
+	</ion-toolbar>
+</ion-footer>

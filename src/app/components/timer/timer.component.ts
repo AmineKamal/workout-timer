@@ -9,9 +9,10 @@ import { multiplier } from '../../../utils/number';
 import { extract } from '../../../utils/object';
 import { toFraction, toTime } from '../../../utils/string';
 import { getHex } from '../../../utils/style';
-import { Timer } from '../../../services/timer';
+import { Timer, TimerAction } from '../../../services/timer';
 import { Exercice } from '../exercice-creator/exercice-creator.component';
 import { Sounds } from 'src/services/sounds';
+import { noSleep } from 'src/services/nosleep';
 
 @Component({
   selector: 'app-timer',
@@ -29,8 +30,6 @@ export class TimerComponent implements OnInit {
 
   private timer: Timer;
   private currentDuration: number;
-  private elapsedTime: number;
-  private remainingTime: number;
   private totalIntervals: number;
   private currentInterval: number;
   private currentSet: number;
@@ -74,6 +73,7 @@ export class TimerComponent implements OnInit {
   }
 
   async ngOnInit() {
+    await noSleep.enable();
     this.initTimer();
     await this.run();
 
@@ -82,6 +82,7 @@ export class TimerComponent implements OnInit {
   }
 
   goBack() {
+    noSleep.disable();
     this.timer.stop();
     this.back();
   }
@@ -101,11 +102,17 @@ export class TimerComponent implements OnInit {
     this.state = 'active';
   }
 
+  next() {
+    this.timer.next();
+  }
+
+  previous() {
+    this.timer.back();
+    if (this.state === 'paused') { this.timer.pause(); }
+  }
+
   private initTimer()
   {
-    this.elapsedTime = 0;
-    this.remainingTime = this.exercice.totalTime;
-
     this.timer = new Timer(this.precision);
     this.timer.on([3000, 2000, 1000], () => Sounds.play('beep'));
     this.timer.subscribe(time => this.update(time));
@@ -163,18 +170,21 @@ export class TimerComponent implements OnInit {
 
     this.currentDuration = time / 1000;
     this.currentElement = type;
-    await this.timer.start(time);
+    const timerPromise = this.timer.start(time);
+
+    if (this.state === 'paused') { this.timer.pause(); }
+
+    await timerPromise;
   }
 
-  private update(time: number) {
-    this.elapsedTime += this.precision;
-    this.remainingTime -= this.precision;
+  private update(time: TimerAction) {
+    const remainingTime = (this.exercice.totalTime / 1000) - time.totalElapsed;
     this.intervals = toFraction(this.currentInterval, this.totalIntervals);
     this.sets = toFraction(this.currentSet, this.totalSets);
-    this.elapsed = toTime(Math.floor(this.elapsedTime / 1000));
-    this.remaining = toTime(Math.ceil(this.remainingTime / 1000));
-    this.time = toTime(Math.ceil(time));
-    this.percent = (time / this.currentDuration) * 100;
+    this.elapsed = toTime(Math.floor(time.totalElapsed));
+    this.remaining = toTime(Math.ceil(remainingTime));
+    this.time = toTime(Math.ceil(time.remaining));
+    this.percent = (time.remaining / this.currentDuration) * 100;
     this.changeDetectorRef.detectChanges();
   }
 }

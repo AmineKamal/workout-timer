@@ -2,17 +2,25 @@ import { gte } from '../utils/number';
 
 type Action<I, O> = (input: I) => O;
 
+export interface TimerAction {
+  remaining: number;
+  elapsed: number;
+  totalElapsed: number;
+}
+
 export class Timer {
-  private subscribers: Action<number, void>[] = [];
+  private subscribers: Action<TimerAction, void>[] = [];
   private callbacks: { [time: number]: TimerCallback } = {};
   private interval!: number;
   private remaining!: number;
+  private elapsed = 0;
+  private totalElapsed = 0;
   private resolve!: (val?: void | PromiseLike<void>) => void;
   private reject: (reason?: any) => void;
 
   public constructor(private precision = 1000) {}
 
-  public subscribe(action: Action<number, void>) {
+  public subscribe(action: Action<TimerAction, void>) {
     this.subscribers.push(action);
   }
 
@@ -33,12 +41,13 @@ export class Timer {
   public start(time: number) {
     const keys = Object.keys(this.callbacks).map(Number);
     keys.forEach(key => this.callbacks[key].unlock());
+    this.elapsed = 0;
 
     return new Promise<void>((resolve, reject) => {
       this.resolve = resolve;
       this.reject = reject;
       this.remaining = Math.floor(time / this.precision);
-      this.interval = setInterval(() => this.decrement(), this.precision) as unknown as number;
+      this.interval = setInterval(() => this.update(), this.precision) as unknown as number;
       this.publish();
     });
   }
@@ -48,7 +57,25 @@ export class Timer {
   }
 
   public resume() {
-    this.interval = setInterval(() => this.decrement(), this.precision) as unknown as number;
+    this.interval = setInterval(() => this.update(), this.precision) as unknown as number;
+  }
+
+  public back() {
+    clearInterval(this.interval);
+    this.totalElapsed -= this.elapsed;
+    this.remaining += this.elapsed;
+    this.elapsed = 0;
+    this.interval = setInterval(() => this.update(), this.precision) as unknown as number;
+    this.publish();
+  }
+
+  public next() {
+    clearInterval(this.interval);
+    this.totalElapsed += this.remaining;
+    this.elapsed += this.remaining;
+    this.remaining = 0;
+    this.publish();
+    this.resolve();
   }
 
   public stop(force = true) {
@@ -57,8 +84,11 @@ export class Timer {
     else { this.resolve(); }
   }
 
-  private decrement() {
+  private update() {
     this.remaining--;
+    this.elapsed++;
+    this.totalElapsed++;
+
     this.publish();
 
     if (this.remaining === 0) {
@@ -67,20 +97,22 @@ export class Timer {
   }
 
   private publish() {
-    const seconds = this.toSeconds();
+    const remaining = this.toSeconds(this.remaining);
+    const elapsed = this.toSeconds(this.elapsed);
+    const totalElapsed = this.toSeconds(this.totalElapsed);
 
     const callbacks = Object.keys(this.callbacks)
       .map(Number)
-      .filter(gte(seconds * 1000))
+      .filter(gte(remaining * 1000))
       .map(key => this.callbacks[key]);
 
     callbacks.forEach(cb => cb.run());
 
-    this.subscribers.forEach(s => s(seconds));
+    this.subscribers.forEach(s => s({remaining, elapsed, totalElapsed}));
   }
 
-  private toSeconds() {
-    const ms = this.remaining * this.precision;
+  private toSeconds(value: number) {
+    const ms = value * this.precision;
     return ms / 1000;
   }
 }

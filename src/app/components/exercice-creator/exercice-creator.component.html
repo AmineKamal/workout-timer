@@ -1,48 +1,50 @@
-<ion-card>
-  <ion-list>
-    <ion-item lines="full" color="primary">
-      <div style="display:flex;justify-content:space-around;width:100%;height:100%;align-items: center">
-        <ion-icon name="refresh-circle-outline"></ion-icon>
-        <ion-input [(ngModel)]="exerciceName"></ion-input>
-        <ion-icon name="add-circle-outline"></ion-icon>
+
+<ion-list style="border-top: solid white 1px;">
+  <ion-item lines="full" color="primary">
+    <div style="display:flex;justify-content:space-around;width:100%;height:100%;align-items: center">
+      <ion-icon name="refresh-circle-outline"></ion-icon>
+      <ion-input [(ngModel)]="exerciceName"></ion-input>
+      <ion-icon name="add-circle-outline"></ion-icon>
+    </div>
+  </ion-item>
+  <ion-item lines="full" *ngFor="let element of elements; let i = index;">
+    <ion-avatar slot="start">
+      <ion-icon [name]="element.icon" color="primary"></ion-icon>
+    </ion-avatar>
+    <ion-label>
+      <h2 class="workout-setting-item-title">{{ element.title }}</h2>
+      <div class="workout-setting-item-body">
+        <ion-icon
+          name="remove-circle-outline"
+          color="primary"
+          (click)="decrementValue(i)"
+        >
+        </ion-icon>
+        {{element.value}}{{element.unit}}
+        <ion-icon
+          name="add-circle-outline"
+          color="primary"
+          (click)="incrementValue(i)"
+        ></ion-icon>
       </div>
-    </ion-item>
-    <ion-item lines="full" *ngFor="let element of elements; let i = index;">
-      <ion-avatar slot="start">
-        <ion-icon [name]="element.icon" color="primary"></ion-icon>
-      </ion-avatar>
-      <ion-label>
-        <h2 class="workout-setting-item-title">{{ element.title }}</h2>
-        <div class="workout-setting-item-body">
-          <ion-icon
-            name="remove-circle-outline"
-            color="primary"
-            (click)="decrementValue(i)"
-          >
-          </ion-icon>
-          {{element.value}}{{element.unit}}
-          <ion-icon
-            name="add-circle-outline"
-            color="primary"
-            (click)="incrementValue(i)"
-          ></ion-icon>
-        </div>
-      </ion-label>
-    </ion-item>
-    <ion-item lines="full">
-      <div style="display:flex;justify-content:space-around;width:100%">
-        <ion-chip outline color="primary">
-          <ion-icon name="alarm-outline"></ion-icon>
-          <ion-label>{{time}}</ion-label>
-        </ion-chip>
-        <ion-chip outline color="primary">
-          <ion-icon name="hourglass-outline"></ion-icon>
-          <ion-label>{{intervals}} Intervals</ion-label>
-        </ion-chip>
-      </div>
-    </ion-item>
-  </ion-list>
-  <ion-toolbar>
-    <ion-button expand="block" (click)="start()">{{ actionName }}</ion-button>
-  </ion-toolbar>
-</ion-card>
+    </ion-label>
+  </ion-item>
+  <ion-item lines="full">
+    <div style="display:flex;justify-content:space-around;width:100%">
+      <ion-chip outline color="primary">
+        <ion-icon name="alarm-outline"></ion-icon>
+        <ion-label>{{time}}</ion-label>
+      </ion-chip>
+      <ion-chip outline color="primary">
+        <ion-icon name="hourglass-outline"></ion-icon>
+        <ion-label>{{intervals}} Intervals</ion-label>
+      </ion-chip>
+    </div>
+  </ion-item>
+</ion-list>
+<ion-toolbar (click)="start()" color="primary">
+  <div class="ion-activatable ripple-parent" style="display: flex;width: 100%;justify-content: center;">
+    {{ actionName }}
+    <ion-ripple-effect></ion-ripple-effect>
+  </div>
+</ion-toolbar>

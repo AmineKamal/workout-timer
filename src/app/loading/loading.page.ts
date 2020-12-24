@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { noSleep } from 'src/services/nosleep';
 import { Sounds } from 'src/services/sounds';
 import { State } from 'src/services/state';
 
@@ -14,8 +15,18 @@ export class LoadingPage implements OnInit {
 
   async ngOnInit() {
     await Sounds.load();
+    this.activateNoSleep();
     State.loaded.next(true);
     this.router.navigate(['home']);
   }
 
+  private activateNoSleep() {
+    const noSleepEvent = async () => {
+      document.removeEventListener('click', noSleepEvent);
+      await noSleep.enable();
+      noSleep.disable();
+    };
+
+    document.addEventListener('click', noSleepEvent);
+  }
 }
