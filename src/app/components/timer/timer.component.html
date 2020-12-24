@@ -26,20 +26,25 @@
 </ion-content>
 
 <ion-footer>
-	<ion-tab-bar [color]="color" style="border-bottom: solid white 1px;">
-		<ion-tab-button selected="true" (click)="previous()" [disabled]="currentElement === 'finish'">
-		  <ion-icon name="play-skip-back-outline"></ion-icon>
-		</ion-tab-button>
-	  
-		<ion-tab-button (click)="toggle()" selected="true" [disabled]="currentElement === 'finish'">
-			<ion-icon *ngIf="state==='active'" name="pause-outline"></ion-icon>
-			<ion-icon *ngIf="state==='paused'" name="play-outline"></ion-icon>
-		</ion-tab-button>
-	  
-		<ion-tab-button selected="true" (click)="next()" [disabled]="currentElement === 'finish'">
-		  <ion-icon name="play-skip-forward-outline"></ion-icon>
-		</ion-tab-button>
-	</ion-tab-bar>
+	<ion-toolbar [color]="color" style="border-bottom: solid white 1px;">
+		<div style="display:flex;flex-direction:row;align-items: center;justify-content: space-around;">
+			<ion-button selected="true" (click)="previous()" [disabled]="currentElement === 'finish'" [color]="color">
+			<ion-icon name="play-skip-back-outline"></ion-icon>
+			<ion-label>Restart</ion-label>
+			</ion-button>
+		
+			<ion-button (click)="toggle()" selected="true" [disabled]="currentElement === 'finish'" [color]="color">
+				<ion-icon *ngIf="state==='active'" name="pause-outline"></ion-icon>
+				<ion-icon *ngIf="state==='paused'" name="play-outline"></ion-icon>
+				<ion-label>{{ state === 'active' ? "Pause" : "Resume"}}</ion-label>
+			</ion-button>
+		
+			<ion-button selected="true" (click)="next()" [disabled]="currentElement === 'finish'" [color]="color">
+			<ion-icon name="play-skip-forward-outline"></ion-icon>
+			<ion-label>Next</ion-label>
+			</ion-button>
+		</div>
+	</ion-toolbar>
 	<ion-toolbar [color]="color">
 		<div style="width:100%; display:flex; justify-content: space-around; align-items: center; height: 100%;padding-top: 5px;">
 			<div style="display:flex; flex-direction: column; align-items:center">

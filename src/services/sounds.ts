@@ -1,4 +1,4 @@
-import { Howl } from 'howler';
+import { Howl, Howler } from 'howler';
 import { StrictMap } from '../utils/types';
 
 const SOUNDS = ['beep', 'whistle', 'ding', 'boxingSound'] as const;
@@ -16,18 +16,20 @@ const createHowlerSounds: () => StrictMap<SoundKey, Howl> = () =>
 
 export const Sounds = new class
 {
-    private sounds = createHowlerSounds();
+    private sounds: StrictMap<SoundKey, Howl>;
     private muted = false;
 
-    public play(sound: SoundKey)
+    public async play(sound: SoundKey)
     {
         if (this.muted) { return; }
-        this.stopAll();
+        await this.stopAll();
         this.sounds[sound].play();
     }
 
     public async load()
     {
+        console.log('Sounds have been enabled');
+        this.sounds = createHowlerSounds();
         await Promise.all(SOUNDS.map(s => this.preload(this.sounds[s])));
     }
 
@@ -41,9 +43,9 @@ export const Sounds = new class
         this.muted = false;
     }
 
-    private stopAll()
+    private async stopAll()
     {
-        SOUNDS.forEach((s) => this.sounds[s].stop());
+        await Promise.all(SOUNDS.map((s) => this.sounds[s].stop()));
     }
 
     private preload(sound: Howl)

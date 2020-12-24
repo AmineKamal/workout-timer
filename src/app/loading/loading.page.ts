@@ -14,8 +14,8 @@ export class LoadingPage implements OnInit {
   constructor(private router: Router) { }
 
   async ngOnInit() {
-    await Sounds.load();
     this.activateNoSleep();
+    this.activateSounds();
     State.loaded.next(true);
     this.router.navigate(['home']);
   }
@@ -28,5 +28,14 @@ export class LoadingPage implements OnInit {
     };
 
     document.addEventListener('click', noSleepEvent);
+  }
+
+  private activateSounds() {
+    const soundsEvent = async () => {
+      document.removeEventListener('click', soundsEvent);
+      await Sounds.load();
+    };
+
+    document.addEventListener('click', soundsEvent);
   }
 }

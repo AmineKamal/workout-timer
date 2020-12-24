@@ -39,8 +39,7 @@ export class Timer {
   }
 
   public start(time: number) {
-    const keys = Object.keys(this.callbacks).map(Number);
-    keys.forEach(key => this.callbacks[key].unlock());
+    this.unlockCallbacks();
     this.elapsed = 0;
 
     return new Promise<void>((resolve, reject) => {
@@ -62,6 +61,7 @@ export class Timer {
 
   public back() {
     clearInterval(this.interval);
+    this.unlockCallbacks();
     this.totalElapsed -= this.elapsed;
     this.remaining += this.elapsed;
     this.elapsed = 0;
@@ -82,6 +82,11 @@ export class Timer {
     clearInterval(this.interval);
     if (force) { this.reject(); }
     else { this.resolve(); }
+  }
+
+  private unlockCallbacks() {
+    const keys = Object.keys(this.callbacks).map(Number);
+    keys.forEach(key => this.callbacks[key].unlock());
   }
 
   private update() {
