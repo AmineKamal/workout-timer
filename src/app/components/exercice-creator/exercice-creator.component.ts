@@ -19,10 +19,11 @@ const defaultSettings: WorkoutSettingElement[] =
 [
   { title: 'Prepare', value: 10, icon: 'accessibility-outline', unit: 's' },
   { title: 'Work', value: 20, icon: 'barbell-outline', unit: 's' },
-  { title: 'Rest', value: 10, icon: 'bed-outline', unit: 's' },
+  { title: 'Rest', value: 10, icon: 'time-outline', unit: 's' },
   { title: 'Cycles', value: 8, icon: 'sync-outline' },
   { title: 'Sets', value: 1, icon: 'repeat-outline' },
-  { title: 'Rest Between Sets', value: 10, icon: 'time-outline', unit: 's' }
+  { title: 'Rest Between Sets', value: 10, icon: 'time-outline', unit: 's' },
+  { title: 'Post Exercice Rest', value: 60, icon: 'bed-outline', unit: 's' },
 ];
 
 @Component({
@@ -32,8 +33,9 @@ const defaultSettings: WorkoutSettingElement[] =
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExerciceCreatorComponent implements OnInit {
-  @Output() action = new EventEmitter<Exercice>();
+  @Input() action: (input: Exercice) => void;
   @Input() actionName: string;
+  @Input() back: () => void;
 
   public elements: WorkoutSettingElement[] = clone(defaultSettings);
   public time = '04:00';
@@ -66,7 +68,8 @@ export class ExerciceCreatorComponent implements OnInit {
   }
 
   public start() {
-    return this.action.emit(this.createExercice());
+    this.action(this.createExercice());
+    this.back();
   }
 
   private createExercice(): Exercice {

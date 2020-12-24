@@ -94,7 +94,7 @@ export class TimerComponent implements OnInit {
 
   goBack() {
     noSleep.disable();
-    this.timer.stop();
+    this.timer?.stop();
     this.back();
   }
 

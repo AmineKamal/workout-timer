@@ -1,50 +1,59 @@
-
-<ion-list style="border-top: solid white 1px;">
-  <ion-item lines="full" color="primary">
-    <div style="display:flex;justify-content:space-around;width:100%;height:100%;align-items: center">
-      <ion-icon name="refresh-circle-outline" (click)="resetDefaults()"></ion-icon>
-      <ion-input placeholder="Enter Exercice Name" [(ngModel)]="exerciceName"></ion-input>
-      <ion-icon name="add-circle-outline"></ion-icon>
-    </div>
-  </ion-item>
-  <ion-item lines="full" *ngFor="let element of elements; let i = index;">
-    <ion-avatar slot="start">
-      <ion-icon [name]="element.icon" color="primary"></ion-icon>
-    </ion-avatar>
-    <ion-label>
-      <h2 class="workout-setting-item-title">{{ element.title }}</h2>
-      <div class="workout-setting-item-body">
-        <ion-icon
-          name="remove-circle-outline"
-          color="primary"
-          (click)="decrementValue(i)"
-        >
-        </ion-icon>
-        {{element.value}}{{element.unit}}
-        <ion-icon
-          name="add-circle-outline"
-          color="primary"
-          (click)="incrementValue(i)"
-        ></ion-icon>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-item lines="none" color="primary">
+      <div style="display:flex;justify-content:space-around;width:100%;height:100%;align-items: center">
+        <ion-icon name="arrow-back-outline" (click)="back()"></ion-icon>
+        <ion-input placeholder="Enter Exercice Name" [(ngModel)]="exerciceName"></ion-input>
+        <ion-icon name="refresh-circle-outline" (click)="resetDefaults()"></ion-icon>
       </div>
-    </ion-label>
-  </ion-item>
-  <ion-item lines="full">
-    <div style="display:flex;justify-content:space-around;width:100%">
-      <ion-chip outline color="primary">
-        <ion-icon name="alarm-outline"></ion-icon>
-        <ion-label>{{time}}</ion-label>
-      </ion-chip>
-      <ion-chip outline color="primary">
-        <ion-icon name="hourglass-outline"></ion-icon>
-        <ion-label>{{intervals}} Intervals</ion-label>
-      </ion-chip>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list style="border-top: solid white 1px;">
+    <ion-item lines="full" *ngFor="let element of elements; let i = index;">
+      <ion-avatar slot="start">
+        <ion-icon [name]="element.icon" color="primary"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2 class="workout-setting-item-title">{{ element.title }}</h2>
+        <div class="workout-setting-item-body">
+          <ion-icon
+            name="remove-circle-outline"
+            color="primary"
+            (click)="decrementValue(i)"
+          >
+          </ion-icon>
+          {{element.value}}{{element.unit}}
+          <ion-icon
+            name="add-circle-outline"
+            color="primary"
+            (click)="incrementValue(i)"
+          ></ion-icon>
+        </div>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="full">
+      <div style="display:flex;justify-content:space-around;width:100%">
+        <ion-chip outline color="primary">
+          <ion-icon name="alarm-outline"></ion-icon>
+          <ion-label>{{time}}</ion-label>
+        </ion-chip>
+        <ion-chip outline color="primary">
+          <ion-icon name="hourglass-outline"></ion-icon>
+          <ion-label>{{intervals}} Intervals</ion-label>
+        </ion-chip>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar (click)="start()" color="primary">
+    <div class="ion-activatable ripple-parent" style="display: flex;width: 100%;justify-content: center;">
+      {{ actionName }}
+      <ion-ripple-effect></ion-ripple-effect>
     </div>
-  </ion-item>
-</ion-list>
-<ion-toolbar (click)="start()" color="primary">
-  <div class="ion-activatable ripple-parent" style="display: flex;width: 100%;justify-content: center;">
-    {{ actionName }}
-    <ion-ripple-effect></ion-ripple-effect>
-  </div>
-</ion-toolbar>
+  </ion-toolbar>
+</ion-footer>

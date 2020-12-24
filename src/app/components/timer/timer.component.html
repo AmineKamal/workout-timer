@@ -7,16 +7,16 @@
 		</ion-buttons>
 		<ion-buttons slot="primary">
 			<ion-button>
-				<ion-icon name="refresh-outline"></ion-icon>
+				<ion-icon name="information-circle-outline"></ion-icon>
 			</ion-button>
 		</ion-buttons>
 		<ion-title>{{ workout.name }}</ion-title>
 	</ion-toolbar>
 
-	<div style="display: flex;height: 15px;">
+	<div [style.height]="workout.exercices.length > 1 ? '15px' : '1px'" style="display: flex;">
 		<div 
 			*ngFor="let exercice of workout.exercices; let i = index"
-			[style.background-color]="i <= currentExerciceIndex ? hexColor : ':#b9bbb6'" 
+			[style.background-color]="i <= currentExerciceIndex ? hexColor : '#b9bbb6'" 
 			[style.width]="(100 / workout.exercices.length).toString() + '%'" 
 			style="height: 100%;border: solid white 1px">
 		</div>

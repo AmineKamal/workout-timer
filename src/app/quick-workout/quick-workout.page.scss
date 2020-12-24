@@ -1,0 +1,28 @@
+ion-avatar > ion-icon {
+  font-size: 40px !important;
+}
+
+.workout-setting-item-body {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.workout-setting-item-title {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+ion-item ion-icon {
+  font-size: 30px;
+}
+
+ion-input {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
