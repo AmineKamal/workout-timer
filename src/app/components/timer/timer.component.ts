@@ -10,9 +10,10 @@ import { extract } from '../../../utils/object';
 import { toFraction, toTime } from '../../../utils/string';
 import { getHex } from '../../../utils/style';
 import { Timer, TimerAction } from '../../../services/timer';
-import { Exercice } from '../exercice-creator/exercice-creator.component';
 import { Sounds } from 'src/services/sounds';
 import { noSleep } from 'src/services/nosleep';
+import { Workout } from 'src/app/quick-workout/quick-workout.page';
+import { Exercice } from '../exercice-creator/exercice-creator.component';
 
 @Component({
   selector: 'app-timer',
@@ -24,7 +25,7 @@ export class TimerComponent implements OnInit {
 
   constructor(private changeDetectorRef: ChangeDetectorRef) {}
   @Input() back: () => void;
-  @Input() exercice: Exercice;
+  @Input() workout: Workout;
 
   private readonly precision = 50;
 
@@ -34,6 +35,8 @@ export class TimerComponent implements OnInit {
   private currentInterval: number;
   private currentSet: number;
 
+  public exercice: Exercice;
+  public currentExerciceIndex: number;
   public totalSets = 1;
   public remaining = '00:00';
   public elapsed = '00:00';
@@ -74,8 +77,16 @@ export class TimerComponent implements OnInit {
 
   async ngOnInit() {
     await noSleep.enable();
-    this.initTimer();
-    await this.run();
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.workout.exercices.length; i++)
+    {
+      this.currentExerciceIndex = i;
+      const exercice = this.workout.exercices[i];
+      this.exercice = exercice;
+      this.initTimer(exercice);
+      await this.run(exercice);
+    }
 
     this.currentElement = 'finish';
     this.changeDetectorRef.detectChanges();
@@ -111,21 +122,21 @@ export class TimerComponent implements OnInit {
     if (this.state === 'paused') { this.timer.pause(); }
   }
 
-  private initTimer()
+  private initTimer(exercice: Exercice)
   {
     this.timer = new Timer(this.precision);
     this.timer.on([3000, 2000, 1000], () => Sounds.play('short-beep'));
     this.timer.subscribe(time => this.update(time));
 
-    const [, , , cycles, sets] = this.exercice.elements.map(extract('value'));
+    const [, , , cycles, sets] = exercice.elements.map(extract('value'));
     this.totalIntervals = cycles;
     this.currentInterval = 1;
     this.totalSets = sets;
     this.currentSet = 1;
   }
 
-  private async run() {
-    const values = this.exercice.elements.map(extract('value'));
+  private async run(exercice: Exercice) {
+    const values = exercice.elements.map(extract('value'));
     const [prepare, work, rest, , , restSets] = values.map(multiplier(1000));
     const [, , , cycles, sets] = values;
 

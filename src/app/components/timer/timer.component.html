@@ -10,10 +10,20 @@
 				<ion-icon name="refresh-outline"></ion-icon>
 			</ion-button>
 		</ion-buttons>
-		<ion-title>{{ exercice.name }}</ion-title>
+		<ion-title>{{ workout.name }}</ion-title>
 	</ion-toolbar>
-	<ion-toolbar [color]="color" style="border-top: solid white 1px;">
-		<ion-title>{{elementTitle | uppercase}}</ion-title>
+
+	<div style="display: flex;height: 15px;">
+		<div 
+			*ngFor="let exercice of workout.exercices; let i = index"
+			[style.background-color]="i <= currentExerciceIndex ? hexColor : ':#b9bbb6'" 
+			[style.width]="(100 / workout.exercices.length).toString() + '%'" 
+			style="height: 100%;border: solid white 1px">
+		</div>
+	</div>
+
+	<ion-toolbar [color]="color">
+		<ion-title>{{elementTitle | uppercase}} {{ exercice?.name ? "-" : "" }} {{ exercice?.name | uppercase }}</ion-title>
 	</ion-toolbar>
 </ion-header>
 

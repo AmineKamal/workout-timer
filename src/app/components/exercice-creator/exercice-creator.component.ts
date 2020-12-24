@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { ModalController } from '@ionic/angular';
-import { TimerComponent } from 'src/app/components/timer/timer.component';
-import { extract } from 'src/utils/object';
+import { clone, extract } from 'src/utils/object';
 import { toTime } from 'src/utils/string';
 
 export interface WorkoutSettingElement {
@@ -17,6 +15,16 @@ export interface Exercice {
   totalTime: number;
 }
 
+const defaultSettings: WorkoutSettingElement[] =
+[
+  { title: 'Prepare', value: 10, icon: 'accessibility-outline', unit: 's' },
+  { title: 'Work', value: 20, icon: 'barbell-outline', unit: 's' },
+  { title: 'Rest', value: 10, icon: 'bed-outline', unit: 's' },
+  { title: 'Cycles', value: 8, icon: 'sync-outline' },
+  { title: 'Sets', value: 1, icon: 'repeat-outline' },
+  { title: 'Rest Between Sets', value: 10, icon: 'time-outline', unit: 's' }
+];
+
 @Component({
   selector: 'app-exercice-creator',
   templateUrl: './exercice-creator.component.html',
@@ -27,38 +35,33 @@ export class ExerciceCreatorComponent implements OnInit {
   @Output() action = new EventEmitter<Exercice>();
   @Input() actionName: string;
 
-  public readonly elements: WorkoutSettingElement[] =
-  [
-    { title: 'Prepare', value: 10, icon: 'accessibility-outline', unit: 's' },
-    { title: 'Work', value: 20, icon: 'barbell-outline', unit: 's' },
-    { title: 'Rest', value: 10, icon: 'bed-outline', unit: 's' },
-    { title: 'Cycles', value: 8, icon: 'sync-outline' },
-    { title: 'Sets', value: 1, icon: 'repeat-outline' },
-    { title: 'Rest Between Sets', value: 10, icon: 'time-outline', unit: 's' }
-  ];
-
-  private totalTime: number;
+  public elements: WorkoutSettingElement[] = clone(defaultSettings);
   public time = '04:00';
   public intervals = 16;
-  public exerciceName = 'Workout';
+  public exerciceName = '';
 
-  constructor(
-    public modalController: ModalController,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {}
+  private totalTime: number;
 
-  ngOnInit() {
+  public constructor(private changeDetectorRef: ChangeDetectorRef) {}
+
+  public ngOnInit() {
     this.update();
   }
 
-  incrementValue(index: number) {
+  public incrementValue(index: number) {
     this.elements[index].value++;
     this.update();
   }
 
-  decrementValue(index: number) {
+  public decrementValue(index: number) {
     if (this.elements[index].value === 0) { return; }
     this.elements[index].value--;
+    this.update();
+  }
+
+  public resetDefaults() {
+    this.elements = clone(defaultSettings);
+    this.exerciceName = '';
     this.update();
   }
 
