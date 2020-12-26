@@ -1,11 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { multiplier, sum } from 'src/utils/number';
+import { extract } from 'src/utils/object';
+import { toTime } from 'src/utils/string';
 import { Exercice, ExerciceCreatorComponent } from '../exercice-creator/exercice-creator.component';
 import { ComponentAction } from '../types';
 
 export interface Workout {
   name: string;
   exercices: Exercice[];
+  totalTime: number;
 }
 
 @Component({
@@ -76,10 +80,18 @@ export class WorkoutCreatorComponent implements OnInit {
     return await modal.present();
   }
 
+  public toTime(time: number, ms = false) {
+    return toTime(ms ? time / 1000 : time);
+  }
+
   private createWorkout() {
+    const exercicesTime = sum(this.exercices.map(extract('totalTime')).map(multiplier(1 / 1000)));
+    const restTime = sum(this.exercices.map(extract('elements')).map(([, , , , , , e]) => e.value), 1);
+
     const workout: Workout = {
       name: this.workoutName || 'Quick Workout',
-      exercices: this.exercices
+      exercices: this.exercices,
+      totalTime: exercicesTime + restTime
     };
 
     return workout;

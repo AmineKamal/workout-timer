@@ -130,19 +130,24 @@ export class TimerComponent implements OnInit {
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.workout.exercices.length; i++)
     {
-      this.currentExerciceIndex = i;
-      const exercice = this.workout.exercices[i];
-      this.initTimer(this.workout.exercices[i]);
-      await this.run(exercice);
-
-      if (i !== this.workout.exercices.length - 1)
-      {
-        await this.startExerciceRest(exercice);
-      }
+      try { await this.doTimerWork(i); }
+      catch { return; }
     }
 
     this.currentElement = 'finish';
     this.changeDetectorRef.detectChanges();
+  }
+
+  private async doTimerWork(i: number) {
+    this.currentExerciceIndex = i;
+    const exercice = this.workout.exercices[i];
+    this.initTimer(this.workout.exercices[i]);
+    await this.run(exercice);
+
+    if (i !== this.workout.exercices.length - 1)
+    {
+      await this.startExerciceRest(exercice);
+    }
   }
 
   private initTimer(exercice: Exercice)
@@ -163,9 +168,7 @@ export class TimerComponent implements OnInit {
     const [prepare, work, rest, , , restSets] = values.map(multiplier(1000));
     const [, , , cycles, sets] = values;
 
-    try { await this.start([prepare, work, rest, cycles, sets, restSets]); }
-    catch { return; }
-
+    await this.start([prepare, work, rest, cycles, sets, restSets]);
     Sounds.play('boxing-bell');
   }
 
@@ -175,6 +178,8 @@ export class TimerComponent implements OnInit {
 
     for (let set = 1; set <= sets; set++)
     {
+      this.currentInterval = 1;
+
       for (let cycle = 1; cycle <= cycles; cycle++)
       {
         Sounds.play('whistle');
@@ -194,7 +199,6 @@ export class TimerComponent implements OnInit {
         await this.set(restSets, 'restSets');
       }
 
-      this.currentInterval = 1;
       this.currentSet++;
     }
   }
@@ -205,8 +209,7 @@ export class TimerComponent implements OnInit {
     this.totalTime = exerciceRest;
     this.createTimer();
 
-    try { await this.set(exerciceRest, 'exerciceRest'); }
-    catch {}
+    await this.set(exerciceRest, 'exerciceRest');
   }
 
   private createTimer() {

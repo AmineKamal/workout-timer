@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Storage } from 'src/services/storage';
 import { Workout as W } from 'src/services/workout';
+import { toTime } from 'src/utils/string';
 import { Workout, WorkoutCreatorComponent } from '../components/workout-creator/workout-creator.component';
 
 @Component({
@@ -64,5 +65,9 @@ export class WorkoutsPage implements OnInit {
     });
 
     await modal.present();
+  }
+
+  toTime(time: number, ms = false) {
+    return toTime(ms ? time / 1000 : time);
   }
 }

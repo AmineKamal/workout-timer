@@ -29,7 +29,7 @@ const COMPONENTS = [
         IonicModule,
         ReactiveFormsModule,
         NgCircleProgressModule.forRoot({
-            radius: 160,
+            radius: 170,
             space: -10,
             maxPercent: 100,
             outerStrokeGradient: true,

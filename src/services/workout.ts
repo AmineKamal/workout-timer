@@ -26,7 +26,8 @@ export const Workout = new class {
     private createQuickExerciceWorkout(exercice: Exercice) {
         const workout: W = {
             name: 'Quick Exercice',
-            exercices: [exercice]
+            exercices: [exercice],
+            totalTime: exercice.totalTime / 1000
         };
 
         return workout;

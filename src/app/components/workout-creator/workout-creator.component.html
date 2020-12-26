@@ -18,7 +18,10 @@
         <ion-item lines="full">
           <ion-icon slot="start" name="barbell" color="tertiary" style="font-size: 40px;"></ion-icon>
           <ion-label style="text-align: center;">{{ exercice.name }}</ion-label>
-          <ion-label style="text-align: center;">{{ exercice.totalTime / 1000 + "s" }}</ion-label>
+          <ion-chip outline color="secondary">
+            <ion-icon name="alarm-outline"></ion-icon>
+            <ion-label>{{ toTime(exercice.totalTime, true) }}</ion-label>
+          </ion-chip>
         </ion-item>
     
         <ion-item-options side="end">
@@ -36,10 +39,10 @@
           <ion-icon name="time-outline" color="tertiary"></ion-icon>
         </ion-avatar>
         <ion-label style="text-align: center;">Rest</ion-label>
-        <ion-label style="text-align: center;">
-          {{ exercice.elements[exercice.elements.length - 1].value }} 
-          {{ exercice.elements[exercice.elements.length - 1].unit }}
-        </ion-label>
+        <ion-chip outline color="secondary">
+          <ion-icon name="alarm-outline"></ion-icon>
+          <ion-label>{{ toTime(exercice.elements[exercice.elements.length - 1].value) }}</ion-label>
+        </ion-chip>
       </ion-item>
     </ng-container>
   </ion-list>

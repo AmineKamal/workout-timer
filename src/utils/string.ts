@@ -4,9 +4,10 @@ export function pad(n: number | string, width: number, z = '0') {
 }
 
 export function toTime(time: number) {
-  const minutes = Math.floor(time / 60);
-  const seconds = time - minutes * 60;
-  return pad(minutes, 2) + ':' + pad(seconds, 2);
+  const hours = Math.floor(time / 3600);
+  const minutes = Math.floor((time - hours * 3600) / 60);
+  const seconds = time - hours * 3600 - minutes * 60;
+  return `${hours > 0 ? pad(hours, 2) + ':' : ''}${pad(minutes, 2)}:${pad(seconds, 2)}`;
 }
 
 export function toFraction(a: number, b: number) {

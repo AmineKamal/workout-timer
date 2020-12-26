@@ -23,7 +23,9 @@
 	</div>
 
 	<ion-toolbar [color]="color">
-		<ion-title>{{elementTitle | uppercase}} {{ exercice?.name ? "-" : "" }} {{ exercice?.name | uppercase }}</ion-title>
+		<div style="display: flex; justify-content: center; width: 100%">
+			<ion-label>{{elementTitle | uppercase}} {{ exercice?.name ? "-" : "" }} {{ exercice?.name | uppercase }}</ion-label>
+		</div>
 	</ion-toolbar>
 </ion-header>
 
