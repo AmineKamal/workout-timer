@@ -4,12 +4,7 @@
     <ion-label>Home</ion-label>
   </ion-tab-button>
 
-  <ion-tab-button [selected]="currentPage === 'quick-workout'" (click)="goto('quick-workout')">
-    <ion-icon name="barbell"></ion-icon>
-    <ion-label>Quick Workout</ion-label>
-  </ion-tab-button>
-
-  <ion-tab-button>
+  <ion-tab-button [selected]="currentPage === 'workouts'" (click)="goto('workouts')">
     <ion-icon name="list"></ion-icon>
     <ion-label>Workouts</ion-label>
   </ion-tab-button>

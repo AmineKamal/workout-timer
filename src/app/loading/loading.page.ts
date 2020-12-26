@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { noSleep } from 'src/services/nosleep';
 import { Sounds } from 'src/services/sounds';
 import { State } from 'src/services/state';
+import { Storage } from 'src/services/storage';
 
 @Component({
   selector: 'app-loading',
@@ -16,6 +17,7 @@ export class LoadingPage implements OnInit {
   async ngOnInit() {
     this.activateNoSleep();
     this.activateSounds();
+    Storage.load();
     State.loaded.next(true);
     this.router.navigate(['home']);
   }

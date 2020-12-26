@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { clone, extract } from 'src/utils/object';
 import { toTime } from 'src/utils/string';
+import { ComponentAction } from '../types';
 
 export interface WorkoutSettingElement {
   title: string;
@@ -9,13 +10,23 @@ export interface WorkoutSettingElement {
   unit?: string;
 }
 
+export type Elements = [
+  WorkoutSettingElement,
+  WorkoutSettingElement,
+  WorkoutSettingElement,
+  WorkoutSettingElement,
+  WorkoutSettingElement,
+  WorkoutSettingElement,
+  WorkoutSettingElement
+];
+
 export interface Exercice {
   name: string;
-  elements: WorkoutSettingElement[];
+  elements: Elements;
   totalTime: number;
 }
 
-const defaultSettings: WorkoutSettingElement[] =
+const defaultSettings: Elements =
 [
   { title: 'Prepare', value: 10, icon: 'accessibility-outline', unit: 's' },
   { title: 'Work', value: 20, icon: 'barbell-outline', unit: 's' },
@@ -33,14 +44,13 @@ const defaultSettings: WorkoutSettingElement[] =
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExerciceCreatorComponent implements OnInit {
-  @Input() action: (input: Exercice) => void;
-  @Input() actionName: string;
+  @Input() actions: ComponentAction<Exercice>[];
   @Input() back: () => void;
+  @Input() elements: Elements = clone(defaultSettings);
+  @Input() exerciceName = '';
 
-  public elements: WorkoutSettingElement[] = clone(defaultSettings);
   public time = '04:00';
   public intervals = 16;
-  public exerciceName = '';
 
   private totalTime: number;
 
@@ -67,9 +77,11 @@ export class ExerciceCreatorComponent implements OnInit {
     this.update();
   }
 
-  public start() {
-    this.action(this.createExercice());
-    this.back();
+  public run(i: number) {
+    const { action, quit } = this.actions[i];
+    action(this.createExercice());
+
+    if (quit) { this.back(); }
   }
 
   private createExercice(): Exercice {

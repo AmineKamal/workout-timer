@@ -12,6 +12,9 @@ export function getHex(color: string) {
     case 'secondary':
       return '#3dc2ff';
 
+    case 'warning':
+      return '#ffc409';
+
     default:
       return '#488aff';
   }

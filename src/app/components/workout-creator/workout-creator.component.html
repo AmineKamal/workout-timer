@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-item lines="none" color="tertiary">
+      <div style="display:flex;justify-content:space-around;width:100%;height:100%;align-items: center">
+        <ion-icon name="arrow-back-outline" (click)="back()"></ion-icon>
+        <ion-input [(ngModel)]="workoutName" placeholder="Enter Workout Name"></ion-input>
+        <ion-icon name="add-circle-outline" (click)="createExercice()"></ion-icon>
+      </div>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list style="border-top: solid white 1px;">
+    <ng-container *ngFor="let exercice of exercices; let i = index;">
+
+      <ion-item-sliding>
+        <ion-item lines="full">
+          <ion-avatar slot="start">
+            <ion-icon name="barbell-outline" color="tertiary"></ion-icon>
+          </ion-avatar>
+          <ion-label style="text-align: center;">{{ exercice.name || "Unamed Exercice" }}</ion-label>
+          <ion-label style="text-align: center;">{{ exercice.totalTime / 1000 + "s" }}</ion-label>
+        </ion-item>
+    
+        <ion-item-options side="end">
+          <ion-item-option color="warning" (click)="editExercice(i)">
+            <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
+          </ion-item-option>
+          <ion-item-option color="danger" (click)="removeExercice(i)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+
+      <ion-item lines="full" *ngIf="i < exercices.length - 1">
+        <ion-avatar slot="start">
+          <ion-icon name="time-outline" color="tertiary"></ion-icon>
+        </ion-avatar>
+        <ion-label style="text-align: center;">Rest</ion-label>
+        <ion-label style="text-align: center;">
+          {{ exercice.elements[exercice.elements.length - 1].value }} 
+          {{ exercice.elements[exercice.elements.length - 1].unit }}
+        </ion-label>
+      </ion-item>
+    </ng-container>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="tertiary">
+    <div style="display: flex;width: 100%">
+      <div style="display: flex;width: 100%">
+        <div 
+          *ngFor="let action of actions; let i = index"
+          (click)="run(i)"
+          [style.width]="(100 / actions.length) + '%'"
+          [style.borderRight]="i < actions.length - 1 ? 'solid white 1px' : 'none'"
+          style="display: flex;justify-content: center;"
+        >
+          <ion-button expand="block" color="tertiary">{{action.name}}</ion-button>
+        </div>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-footer>
+
+
+

@@ -12,7 +12,7 @@ import { getHex } from '../../../utils/style';
 import { Timer, TimerAction } from '../../../services/timer';
 import { Sounds } from 'src/services/sounds';
 import { noSleep } from 'src/services/nosleep';
-import { Workout } from 'src/app/quick-workout/quick-workout.page';
+import { Workout } from 'src/app/components/workout-creator/workout-creator.component';
 import { Exercice } from '../exercice-creator/exercice-creator.component';
 
 @Component({
@@ -32,6 +32,7 @@ export class TimerComponent implements OnInit {
   private timer: Timer;
   private currentDuration: number;
   private totalIntervals: number;
+  private totalTime: number;
   private currentInterval: number;
   private currentSet: number;
 
@@ -43,7 +44,7 @@ export class TimerComponent implements OnInit {
   public time = '00:00';
   public state: 'paused' | 'active' = 'active';
   public percent: number;
-  public currentElement: 'prepare' | 'work' | 'rest' | 'restSets'| 'finish';
+  public currentElement: 'prepare' | 'work' | 'rest' | 'restSets'| 'finish' | 'exerciceRest';
   public intervals = '00/00';
   public sets = '00/00';
 
@@ -60,6 +61,10 @@ export class TimerComponent implements OnInit {
       return 'secondary';
     }
 
+    if (this.currentElement === 'exerciceRest') {
+      return 'tertiary';
+    }
+
     if (this.currentElement === 'finish') {
       return 'tertiary';
     }
@@ -72,24 +77,20 @@ export class TimerComponent implements OnInit {
   }
 
   public get elementTitle() {
-    return this.currentElement === 'restSets' ? 'Rest Set' : this.currentElement;
+    switch (this.currentElement) {
+      case 'restSets':
+        return 'Rest Set';
+
+      case 'exerciceRest':
+        return 'Exercice Rest';
+
+      default:
+        return this.currentElement;
+    }
   }
 
   async ngOnInit() {
-    await noSleep.enable();
-
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.workout.exercices.length; i++)
-    {
-      this.currentExerciceIndex = i;
-      const exercice = this.workout.exercices[i];
-      this.exercice = exercice;
-      this.initTimer(exercice);
-      await this.run(exercice);
-    }
-
-    this.currentElement = 'finish';
-    this.changeDetectorRef.detectChanges();
+    await this.init();
   }
 
   goBack() {
@@ -122,17 +123,39 @@ export class TimerComponent implements OnInit {
     if (this.state === 'paused') { this.timer.pause(); }
   }
 
+  private async init()
+  {
+    await noSleep.enable();
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.workout.exercices.length; i++)
+    {
+      this.currentExerciceIndex = i;
+      const exercice = this.workout.exercices[i];
+      this.initTimer(this.workout.exercices[i]);
+      await this.run(exercice);
+
+      if (i !== this.workout.exercices.length - 1)
+      {
+        await this.startExerciceRest(exercice);
+      }
+    }
+
+    this.currentElement = 'finish';
+    this.changeDetectorRef.detectChanges();
+  }
+
   private initTimer(exercice: Exercice)
   {
-    this.timer = new Timer(this.precision);
-    this.timer.on([3000, 2000, 1000], () => Sounds.play('short-beep'));
-    this.timer.subscribe(time => this.update(time));
+    this.exercice = exercice;
+    this.createTimer();
 
     const [, , , cycles, sets] = exercice.elements.map(extract('value'));
     this.totalIntervals = cycles;
     this.currentInterval = 1;
     this.totalSets = sets;
     this.currentSet = 1;
+    this.totalTime = this.exercice.totalTime;
   }
 
   private async run(exercice: Exercice) {
@@ -176,7 +199,23 @@ export class TimerComponent implements OnInit {
     }
   }
 
-  private async set(time: number, type: 'prepare' | 'work' | 'rest' | 'restSets') {
+  private async startExerciceRest(exercice: Exercice) {
+    const values = exercice.elements.map(extract('value'));
+    const [, , , , , , exerciceRest] = values.map(multiplier(1000));
+    this.totalTime = exerciceRest;
+    this.createTimer();
+
+    try { await this.set(exerciceRest, 'exerciceRest'); }
+    catch {}
+  }
+
+  private createTimer() {
+    this.timer = new Timer(this.precision);
+    this.timer.on([3000, 2000, 1000], () => Sounds.play('short-beep'));
+    this.timer.subscribe(time => this.update(time));
+  }
+
+  private async set(time: number, type: 'prepare' | 'work' | 'rest' | 'restSets' | 'exerciceRest') {
     if (time <= 0) { return; }
 
     this.currentDuration = time / 1000;
@@ -189,7 +228,7 @@ export class TimerComponent implements OnInit {
   }
 
   private update(time: TimerAction) {
-    const remainingTime = (this.exercice.totalTime / 1000) - time.totalElapsed;
+    const remainingTime = (this.totalTime / 1000) - time.totalElapsed;
     this.intervals = toFraction(this.currentInterval, this.totalIntervals);
     this.sets = toFraction(this.currentSet, this.totalSets);
     this.elapsed = toTime(Math.floor(time.totalElapsed));

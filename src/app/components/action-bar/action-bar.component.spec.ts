@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { QuickWorkoutPage } from './quick-workout.page';
+import { ActionBarComponent } from './action-bar.component';
 
-describe('QuickWorkoutPage', () => {
-  let component: QuickWorkoutPage;
-  let fixture: ComponentFixture<QuickWorkoutPage>;
+describe('ActionBarComponent', () => {
+  let component: ActionBarComponent;
+  let fixture: ComponentFixture<ActionBarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ QuickWorkoutPage ],
+      declarations: [ ActionBarComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(QuickWorkoutPage);
+    fixture = TestBed.createComponent(ActionBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

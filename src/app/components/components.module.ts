@@ -7,11 +7,15 @@ import { FooterComponent } from './footer/footer.component';
 import { ExerciceCreatorComponent } from './exercice-creator/exercice-creator.component';
 import { TimerComponent } from './timer/timer.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { WorkoutCreatorComponent } from './workout-creator/workout-creator.component';
+import { ActionBarComponent } from './action-bar/action-bar.component';
 
 const COMPONENTS = [
     HeaderComponent,
     FooterComponent,
+    ActionBarComponent,
     ExerciceCreatorComponent,
+    WorkoutCreatorComponent,
     TimerComponent
 ];
 
