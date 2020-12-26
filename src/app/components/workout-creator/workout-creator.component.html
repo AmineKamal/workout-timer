@@ -16,10 +16,8 @@
 
       <ion-item-sliding>
         <ion-item lines="full">
-          <ion-avatar slot="start">
-            <ion-icon name="barbell-outline" color="tertiary"></ion-icon>
-          </ion-avatar>
-          <ion-label style="text-align: center;">{{ exercice.name || "Unamed Exercice" }}</ion-label>
+          <ion-icon slot="start" name="barbell" color="tertiary" style="font-size: 40px;"></ion-icon>
+          <ion-label style="text-align: center;">{{ exercice.name }}</ion-label>
           <ion-label style="text-align: center;">{{ exercice.totalTime / 1000 + "s" }}</ion-label>
         </ion-item>
     

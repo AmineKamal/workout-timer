@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { Storage } from 'src/services/storage';
 import { Workout as W } from 'src/services/workout';
 import { clone } from 'src/utils/object';
@@ -14,11 +14,13 @@ import { WorkoutCreatorComponent, Workout } from '../components/workout-creator/
 })
 export class HomePage implements OnInit {
 
-  constructor(private modalController: ModalController) {}
+  constructor(private modalController: ModalController, private toastController: ToastController) {}
 
   ngOnInit() {}
 
   public async quickWorkout() {
+    const index = Storage.workouts.length;
+
     const modal = await this.modalController.create({
       component: WorkoutCreatorComponent,
       componentProps: {
@@ -31,11 +33,20 @@ export class HomePage implements OnInit {
           },
           {
             name: 'SAVE',
-            action: (workout: Workout) => Storage.update('workouts', (v) => v.push(workout)),
+            action: (workout: Workout) => {
+              if (Storage.workouts.length > index) {
+                Storage.update('workouts', (v) => (v[index] = workout));
+              } else {
+                Storage.update('workouts', (v) => v.push(workout));
+              }
+
+              this.displaySaveToast();
+            },
           }
         ]
       }
     });
+
     await modal.present();
   }
 
@@ -55,5 +66,15 @@ export class HomePage implements OnInit {
       });
 
       return await modal.present();
+  }
+
+  private async displaySaveToast() {
+    const toast = await this.toastController.create({
+      message: 'Your workout has been saved.',
+      duration: 2000,
+      color: 'success'
+    });
+
+    await toast.present();
   }
 }

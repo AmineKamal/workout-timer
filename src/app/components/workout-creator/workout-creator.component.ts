@@ -16,9 +16,8 @@ export interface Workout {
 export class WorkoutCreatorComponent implements OnInit {
   @Input() actions: ComponentAction<Workout>[];
   @Input() back: () => void;
-
-  public exercices: Exercice[] = [];
-  public workoutName = '';
+  @Input() exercices: Exercice[] = [];
+  @Input() workoutName = '';
 
   constructor(private modalController: ModalController) {}
 

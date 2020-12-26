@@ -86,7 +86,7 @@ export class ExerciceCreatorComponent implements OnInit {
 
   private createExercice(): Exercice {
     return {
-      name: this.exerciceName,
+      name: this.exerciceName || 'Quick Exercice',
       elements: this.elements,
       totalTime: this.totalTime * 1000
     };
