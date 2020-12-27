@@ -1,18 +1,16 @@
 <ion-header>
   <ion-toolbar color="secondary">
-    <ion-item lines="none" color="secondary">
-      <div style="display:flex;justify-content:space-around;width:100%;height:100%;align-items: center">
-        <ion-icon name="arrow-back-outline" (click)="back()"></ion-icon>
-        <ion-input placeholder="Enter Exercice Name" [(ngModel)]="exerciceName"></ion-input>
-        <ion-icon name="refresh-circle-outline" (click)="resetDefaults()"></ion-icon>
-      </div>
-    </ion-item>
+    <div style="display:flex;justify-content:space-around;width:100%;height:100%;align-items: center;padding-left: 10px;padding-right: 10px;">
+      <ion-icon name="arrow-back-outline" (click)="back()"></ion-icon>
+      <ion-input placeholder="Enter Exercice Name" [(ngModel)]="exerciceName"></ion-input>
+      <ion-icon name="refresh-circle-outline" (click)="resetDefaults()"></ion-icon>
+    </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-list style="border-top: solid white 1px;">
-    <ion-item lines="full" *ngFor="let element of elements; let i = index;">
+    <ion-item lines="full" *ngFor="let element of elements; let i = index;" button detail="false">
       <ion-avatar slot="start">
         <ion-icon [name]="element.icon" color="secondary"></ion-icon>
       </ion-avatar>
@@ -22,15 +20,21 @@
           <ion-icon
             name="remove-circle-outline"
             color="secondary"
-            (click)="decrementValue(i)"
-          >
+            (click)="decrementValue(i)">
           </ion-icon>
-          {{element.value}}{{element.unit}}
+          <ion-datetime 
+            *ngIf="element.unit === 's'" 
+            displayFormat="mm:ss" 
+            [value]="toTime(element.value)" 
+            (ionChange)="updateTime($event, i)"
+            style="font-size: 20px;padding:0;">
+          </ion-datetime>
+          <span *ngIf="!element.unit">{{element.value}}</span>
           <ion-icon
             name="add-circle-outline"
             color="secondary"
-            (click)="incrementValue(i)"
-          ></ion-icon>
+            (click)="incrementValue(i)">
+          </ion-icon>
         </div>
       </ion-label>
     </ion-item>
@@ -47,6 +51,12 @@
       </div>
     </ion-item>
   </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="secondary">
+      <ion-icon name="list-outline" ></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
 
 <ion-footer>

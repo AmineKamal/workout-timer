@@ -5,6 +5,7 @@ import { extract } from 'src/utils/object';
 import { toTime } from 'src/utils/string';
 import { Exercice, ExerciceCreatorComponent } from '../exercice-creator/exercice-creator.component';
 import { ComponentAction } from '../types';
+import { ItemReorderEventDetail } from '@ionic/core';
 
 export interface Workout {
   name: string;
@@ -22,6 +23,8 @@ export class WorkoutCreatorComponent implements OnInit {
   @Input() back: () => void;
   @Input() exercices: Exercice[] = [];
   @Input() workoutName = '';
+
+  public activateReorder = false;
 
   constructor(private modalController: ModalController) {}
 
@@ -78,6 +81,14 @@ export class WorkoutCreatorComponent implements OnInit {
     });
 
     return await modal.present();
+  }
+
+  public toggleReorder() {
+    this.activateReorder = !this.activateReorder;
+  }
+
+  public doReorder(ev: CustomEvent<ItemReorderEventDetail>) {
+    this.exercices = ev.detail.complete(this.exercices);
   }
 
   public toTime(time: number, ms = false) {

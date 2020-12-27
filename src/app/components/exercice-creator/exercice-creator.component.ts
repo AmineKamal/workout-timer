@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { clone, extract } from 'src/utils/object';
-import { toTime } from 'src/utils/string';
+import { parseTime, toTime } from 'src/utils/string';
 import { ComponentAction } from '../types';
 
 export interface WorkoutSettingElement {
@@ -82,6 +82,20 @@ export class ExerciceCreatorComponent implements OnInit {
     action(this.createExercice());
 
     if (quit) { this.back(); }
+  }
+
+  updateTime(event: any, i: number) {
+    const value: string = event.detail.value;
+    const seconds = parseTime(value);
+
+    if (this.elements[i].value === seconds) { return; }
+
+    this.elements[i].value = seconds;
+    this.update();
+  }
+
+  toTime(time: number, ms = false) {
+    return toTime(ms ? time / 1000 : time, true);
   }
 
   private createExercice(): Exercice {

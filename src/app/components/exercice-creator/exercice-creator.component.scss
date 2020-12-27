@@ -21,8 +21,16 @@ ion-item ion-icon {
   font-size: 30px;
 }
 
+ion-toolbar ion-icon {
+  font-size: 30px;
+}
+
 ion-input {
   display: flex;
   justify-content: center;
   text-align: center;
+}
+
+ion-datetime {
+  position: relative;
 }

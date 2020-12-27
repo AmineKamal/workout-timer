@@ -1,50 +1,51 @@
 <ion-header>
   <ion-toolbar color="tertiary">
-    <ion-item lines="none" color="tertiary">
-      <div style="display:flex;justify-content:space-around;width:100%;height:100%;align-items: center">
+      <div style="display:flex;justify-content:space-around;width:100%;height:100%;align-items: center;padding-left: 10px;padding-right: 10px;">
         <ion-icon name="arrow-back-outline" (click)="back()"></ion-icon>
         <ion-input [(ngModel)]="workoutName" placeholder="Enter Workout Name"></ion-input>
+        <ion-icon *ngIf="!activateReorder" name="move-outline" (click)="toggleReorder()" style="margin-right: 5px;"></ion-icon>
+        <ion-icon *ngIf="activateReorder" name="reorder-four-outline" (click)="toggleReorder()" style="margin-right: 5px;"></ion-icon>
         <ion-icon name="add-circle-outline" (click)="createExercice()"></ion-icon>
       </div>
-    </ion-item>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-list style="border-top: solid white 1px;">
-    <ng-container *ngFor="let exercice of exercices; let i = index;">
+    <ion-reorder-group (ionItemReorder)="doReorder($event)" [disabled]="!activateReorder">
+      <ion-reorder *ngFor="let exercice of exercices; let i = index;">
+        <ion-item-sliding>
+          <ion-item lines="full">
+            <ion-icon slot="start" name="barbell" color="tertiary" style="font-size: 40px;"></ion-icon>
+            <ion-label style="text-align: center;">{{ exercice.name }}</ion-label>
+            <ion-chip outline color="secondary">
+              <ion-icon name="alarm-outline"></ion-icon>
+              <ion-label>{{ toTime(exercice.totalTime, true) }}</ion-label>
+            </ion-chip>
+          </ion-item>
+      
+          <ion-item-options side="end">
+            <ion-item-option color="warning" (click)="editExercice(i)">
+              <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
+            </ion-item-option>
+            <ion-item-option color="danger" (click)="removeExercice(i)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
 
-      <ion-item-sliding>
-        <ion-item lines="full">
-          <ion-icon slot="start" name="barbell" color="tertiary" style="font-size: 40px;"></ion-icon>
-          <ion-label style="text-align: center;">{{ exercice.name }}</ion-label>
+        <ion-item lines="full" *ngIf="i < exercices.length - 1">
+          <ion-avatar slot="start">
+            <ion-icon name="time-outline" color="tertiary"></ion-icon>
+          </ion-avatar>
+          <ion-label style="text-align: center;">Rest</ion-label>
           <ion-chip outline color="secondary">
             <ion-icon name="alarm-outline"></ion-icon>
-            <ion-label>{{ toTime(exercice.totalTime, true) }}</ion-label>
+            <ion-label>{{ toTime(exercice.elements[exercice.elements.length - 1].value) }}</ion-label>
           </ion-chip>
         </ion-item>
-    
-        <ion-item-options side="end">
-          <ion-item-option color="warning" (click)="editExercice(i)">
-            <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
-          </ion-item-option>
-          <ion-item-option color="danger" (click)="removeExercice(i)">
-            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-
-      <ion-item lines="full" *ngIf="i < exercices.length - 1">
-        <ion-avatar slot="start">
-          <ion-icon name="time-outline" color="tertiary"></ion-icon>
-        </ion-avatar>
-        <ion-label style="text-align: center;">Rest</ion-label>
-        <ion-chip outline color="secondary">
-          <ion-icon name="alarm-outline"></ion-icon>
-          <ion-label>{{ toTime(exercice.elements[exercice.elements.length - 1].value) }}</ion-label>
-        </ion-chip>
-      </ion-item>
-    </ng-container>
+      </ion-reorder>
+    </ion-reorder-group>
   </ion-list>
 </ion-content>
 

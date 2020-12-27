@@ -240,4 +240,5 @@ export class TimerComponent implements OnInit {
     this.percent = (time.remaining / this.currentDuration) * 100;
     this.changeDetectorRef.detectChanges();
   }
+
 }
