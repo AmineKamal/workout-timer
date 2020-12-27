@@ -2,8 +2,10 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   Input,
-  OnInit
+  OnInit,
+  ViewChild
 } from '@angular/core';
 import { multiplier } from '../../../utils/number';
 import { extract } from '../../../utils/object';
@@ -13,7 +15,9 @@ import { Timer, TimerAction } from '../../../services/timer';
 import { Sounds } from 'src/services/sounds';
 import { noSleep } from 'src/services/nosleep';
 import { Workout } from 'src/app/components/workout-creator/workout-creator.component';
-import { Exercice } from '../exercice-creator/exercice-creator.component';
+import { Exercice, WorkoutSettingElement } from '../exercice-creator/exercice-creator.component';
+import { CLickToContinue, clickToContinue } from 'src/services/events';
+import { CircleProgressComponent } from 'ng-circle-progress';
 
 @Component({
   selector: 'app-timer',
@@ -26,6 +30,8 @@ export class TimerComponent implements OnInit {
   constructor(private changeDetectorRef: ChangeDetectorRef) {}
   @Input() back: () => void;
   @Input() workout: Workout;
+  @ViewChild('progress') progressComponent: ElementRef<HTMLElement>;
+  @ViewChild('progressCircle') progressCircle: CircleProgressComponent;
 
   private readonly precision = 50;
 
@@ -35,6 +41,7 @@ export class TimerComponent implements OnInit {
   private totalTime: number;
   private currentInterval: number;
   private currentSet: number;
+  private clickToContinueHandler: CLickToContinue;
 
   public exercice: Exercice;
   public currentExerciceIndex: number;
@@ -47,6 +54,9 @@ export class TimerComponent implements OnInit {
   public currentElement: 'prepare' | 'work' | 'rest' | 'restSets'| 'finish' | 'exerciceRest';
   public intervals = '00/00';
   public sets = '00/00';
+  public activateControls = true;
+  public clickToContinue = false;
+  public reps: string;
 
   public get color() {
     if (this.currentElement === 'work') {
@@ -96,6 +106,7 @@ export class TimerComponent implements OnInit {
   goBack() {
     noSleep.disable();
     this.timer?.stop();
+    this.clickToContinueHandler?.cancel();
     this.back();
   }
 
@@ -134,6 +145,7 @@ export class TimerComponent implements OnInit {
       catch { return; }
     }
 
+    this.activateControls = false;
     this.currentElement = 'finish';
     this.changeDetectorRef.detectChanges();
   }
@@ -164,16 +176,14 @@ export class TimerComponent implements OnInit {
   }
 
   private async run(exercice: Exercice) {
-    const values = exercice.elements.map(extract('value'));
-    const [prepare, work, rest, , , restSets] = values.map(multiplier(1000));
-    const [, , , cycles, sets] = values;
-
-    await this.start([prepare, work, rest, cycles, sets, restSets]);
+    await this.start(exercice.elements);
     Sounds.play('boxing-bell');
   }
 
-  private async start([prepare, work, rest, cycles, sets, restSets]: number[])
+  private async start([prepare, work, rest, cyclesElement, setsElement, restSets]: WorkoutSettingElement[])
   {
+    const [cycles, sets] = [cyclesElement, setsElement].map(extract('value'));
+
     await this.set(prepare, 'prepare');
 
     for (let set = 1; set <= sets; set++)
@@ -201,12 +211,13 @@ export class TimerComponent implements OnInit {
 
       this.currentSet++;
     }
+
+    this.currentSet = sets;
   }
 
   private async startExerciceRest(exercice: Exercice) {
-    const values = exercice.elements.map(extract('value'));
-    const [, , , , , , exerciceRest] = values.map(multiplier(1000));
-    this.totalTime = exerciceRest;
+    const [, , , , , , exerciceRest] =  exercice.elements;
+    this.totalTime = exerciceRest.value * 1000;
     this.createTimer();
 
     await this.set(exerciceRest, 'exerciceRest');
@@ -218,16 +229,39 @@ export class TimerComponent implements OnInit {
     this.timer.subscribe(time => this.update(time));
   }
 
-  private async set(time: number, type: 'prepare' | 'work' | 'rest' | 'restSets' | 'exerciceRest') {
+  private async set(element: WorkoutSettingElement, type: 'prepare' | 'work' | 'rest' | 'restSets' | 'exerciceRest') {
+    this.currentElement = type;
+    if (element.unit === 'reps') { return await this.setClickToContinue(element); }
+
+    const time = element.value * 1000;
     if (time <= 0) { return; }
 
     this.currentDuration = time / 1000;
-    this.currentElement = type;
     const timerPromise = this.timer.start(time);
 
     if (this.state === 'paused') { this.timer.pause(); }
 
     await timerPromise;
+  }
+
+  private async setClickToContinue(element: WorkoutSettingElement) {
+    this.activateControls = false;
+    this.elapsed = '--:--';
+    this.remaining = '--:--';
+    this.percent = 100;
+    this.intervals = toFraction(this.currentInterval, this.totalIntervals);
+    this.sets = toFraction(this.currentSet, this.totalSets);
+    this.time = `${element.unit?.toUpperCase()}`;
+    this.reps = element.value > 0 ? element.value.toString() : '';
+    this.clickToContinue = true;
+    this.changeDetectorRef.detectChanges();
+
+    this.clickToContinueHandler = clickToContinue(this.progressComponent.nativeElement);
+    await this.clickToContinueHandler.promise;
+
+    this.activateControls = true;
+    this.clickToContinue = false;
+    this.changeDetectorRef.detectChanges();
   }
 
   private update(time: TimerAction) {

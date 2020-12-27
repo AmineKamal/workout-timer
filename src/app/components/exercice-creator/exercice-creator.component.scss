@@ -5,9 +5,11 @@ ion-avatar > ion-icon {
 .workout-setting-item-body {
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   margin-top: 5px;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 .workout-setting-item-title {
@@ -33,4 +35,8 @@ ion-input {
 
 ion-datetime {
   position: relative;
+}
+
+ion-item {
+  --highlight-height: 0;
 }

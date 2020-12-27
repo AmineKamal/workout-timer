@@ -31,27 +31,31 @@
 
 <ion-content>
 	<div style="display: flex; width: 100%;height:100%;justify-content: center;align-items: center;">
-		<circle-progress [percent]="percent" [title]="time" [outerStrokeColor]="hexColor"
-			[outerStrokeGradientStopColor]="hexColor" [titleColor]="hexColor">
-		</circle-progress>
+		<div #progress>
+			<span *ngIf="clickToContinue" [style.color]="hexColor" style="position: absolute;left: 50%;top:30%;transform: translate(-50%, -50%);font-size: 75px;"> {{reps}} </span>
+			<circle-progress #progressCircle [percent]="percent" [title]="time" [outerStrokeColor]="hexColor"
+				[outerStrokeGradientStopColor]="hexColor" [titleColor]="hexColor">
+			</circle-progress>
+			<span *ngIf="clickToContinue" [style.color]="hexColor" style="position: absolute;left: 50%;top:63%;transform: translate(-50%, -50%);font-size: large;"> CLICK TO CONTINUE </span>
+		</div>
 	</div>
 </ion-content>
 
 <ion-footer>
 	<ion-toolbar [color]="color" style="border-bottom: solid white 1px;">
 		<div style="display:flex;flex-direction:row;align-items: center;justify-content: space-around;">
-			<ion-button selected="true" (click)="previous()" [disabled]="currentElement === 'finish'" [color]="color">
+			<ion-button selected="true" (click)="previous()" [disabled]="!activateControls" [color]="color">
 			<ion-icon name="play-skip-back-outline"></ion-icon>
 			<ion-label>Restart</ion-label>
 			</ion-button>
 		
-			<ion-button (click)="toggle()" selected="true" [disabled]="currentElement === 'finish'" [color]="color">
+			<ion-button (click)="toggle()" selected="true" [disabled]="!activateControls" [color]="color">
 				<ion-icon *ngIf="state==='active'" name="pause-outline"></ion-icon>
 				<ion-icon *ngIf="state==='paused'" name="play-outline"></ion-icon>
 				<ion-label>{{ state === 'active' ? "Pause" : "Resume"}}</ion-label>
 			</ion-button>
 		
-			<ion-button selected="true" (click)="next()" [disabled]="currentElement === 'finish'" [color]="color">
+			<ion-button selected="true" (click)="next()" [disabled]="!activateControls" [color]="color">
 			<ion-icon name="play-skip-forward-outline"></ion-icon>
 			<ion-label>Next</ion-label>
 			</ion-button>

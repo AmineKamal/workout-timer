@@ -15,7 +15,11 @@
         <ion-icon [name]="element.icon" color="secondary"></ion-icon>
       </ion-avatar>
       <ion-label>
-        <h2 class="workout-setting-item-title">{{ element.title }}</h2>
+        <h2 class="workout-setting-item-title">
+          {{ element.title }}
+          <span style="width: 10px;"></span>
+          <ion-icon *ngIf="element.reppable" name="time" [color]="element.unit === 's' ? 'secondary' : 'danger'" (click)="toggleReps(i)"></ion-icon>
+        </h2>
         <div class="workout-setting-item-body">
           <ion-icon
             name="remove-circle-outline"
@@ -30,6 +34,11 @@
             style="font-size: 20px;padding:0;">
           </ion-datetime>
           <span *ngIf="!element.unit">{{element.value}}</span>
+          <span *ngIf="element.unit === 'reps'">{{element.value > 0 ? element.value : ''}} {{ element.unit }}</span>
+          <!-- <span *ngIf="element.unit === 'reps'">
+            <input [(ngModel)]="element.value" style="border: none; width: 40px; text-align:center" type="number" (ngModelChange)="update()">reps
+          </span>
+          <input *ngIf="!element.unit" [(ngModel)]="element.value" style="border: none; width: 40px; text-align:center" type="number" (ngModelChange)="update()"> -->
           <ion-icon
             name="add-circle-outline"
             color="secondary"

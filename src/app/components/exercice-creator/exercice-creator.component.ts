@@ -3,11 +3,14 @@ import { clone, extract } from 'src/utils/object';
 import { parseTime, toTime } from 'src/utils/string';
 import { ComponentAction } from '../types';
 
+export type WorkoutElementUnit = 's' | 'reps';
+
 export interface WorkoutSettingElement {
   title: string;
   value: number;
   icon: string;
-  unit?: string;
+  unit?: WorkoutElementUnit;
+  reppable?: boolean;
 }
 
 export type Elements = [
@@ -29,7 +32,7 @@ export interface Exercice {
 const defaultSettings: Elements =
 [
   { title: 'Prepare', value: 10, icon: 'accessibility-outline', unit: 's' },
-  { title: 'Work', value: 20, icon: 'barbell-outline', unit: 's' },
+  { title: 'Work', value: 20, icon: 'barbell-outline', unit: 's', reppable: true },
   { title: 'Rest', value: 10, icon: 'time-outline', unit: 's' },
   { title: 'Cycles', value: 8, icon: 'sync-outline' },
   { title: 'Sets', value: 1, icon: 'repeat-outline' },
@@ -98,6 +101,21 @@ export class ExerciceCreatorComponent implements OnInit {
     return toTime(ms ? time / 1000 : time, true);
   }
 
+  public toggleReps(i: number) {
+    const element = this.elements[i];
+    if (!element.reppable) { return; }
+
+    if (element.unit === 'reps') {
+      element.unit = 's';
+      element.value = defaultSettings[i].value;
+    } else {
+      element.unit = 'reps';
+      element.value = 0;
+    }
+
+    this.update();
+  }
+
   private createExercice(): Exercice {
     return {
       name: this.exerciceName || 'Quick Exercice',
@@ -107,8 +125,10 @@ export class ExerciceCreatorComponent implements OnInit {
   }
 
   private update() {
+    const [, workElement] = this.elements;
     const [prepare, work, rest, cycles, sets, restSets] = this.elements.map(extract('value'));
-    this.totalTime = work * cycles;
+
+    this.totalTime = workElement.unit === 's' ? work * cycles : 0;
     this.totalTime += rest * (cycles - 1);
     this.totalTime *= sets;
     this.totalTime += restSets * (sets - 1);
