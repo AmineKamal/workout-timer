@@ -9,6 +9,7 @@ import { TimerComponent } from './timer/timer.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { WorkoutCreatorComponent } from './workout-creator/workout-creator.component';
 import { ActionBarComponent } from './action-bar/action-bar.component';
+import { ExercicePresetsComponent } from './exercice-presets/exercice-presets.component';
 
 const COMPONENTS = [
     HeaderComponent,
@@ -16,7 +17,8 @@ const COMPONENTS = [
     ActionBarComponent,
     ExerciceCreatorComponent,
     WorkoutCreatorComponent,
-    TimerComponent
+    TimerComponent,
+    ExercicePresetsComponent
 ];
 
 @NgModule({

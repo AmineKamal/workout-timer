@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <div style="display:flex;justify-content:space-between;width:100%;height:100%;align-items: center;padding-left: 10px;padding-right: 10px;">
+      <ion-icon name="arrow-back-outline" (click)="back()"></ion-icon>
+      <span> Exercice Presets </span>
+      <span style="width: 20px;"></span>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item button detail="false" lines="full" *ngFor="let preset of presets; let i = index">
+      <ion-label (click)="run(i)">{{ preset.name }}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

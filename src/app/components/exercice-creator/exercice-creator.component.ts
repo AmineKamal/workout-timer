@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { ModalController, ToastController } from '@ionic/angular';
+import { Storage } from 'src/services/storage';
 import { clone, extract } from 'src/utils/object';
 import { parseTime, toTime } from 'src/utils/string';
+import { ExercicePresetsComponent } from '../exercice-presets/exercice-presets.component';
 import { ComponentAction } from '../types';
 
 export type WorkoutElementUnit = 's' | 'reps';
@@ -11,6 +14,7 @@ export interface WorkoutSettingElement {
   icon: string;
   unit?: WorkoutElementUnit;
   reppable?: boolean;
+  presetConfigurable?: boolean;
 }
 
 export type Elements = [
@@ -27,6 +31,11 @@ export interface Exercice {
   name: string;
   elements: Elements;
   totalTime: number;
+}
+
+export interface ExercicePreset {
+  name: string;
+  elements: Elements;
 }
 
 const defaultSettings: Elements =
@@ -51,15 +60,24 @@ export class ExerciceCreatorComponent implements OnInit {
   @Input() back: () => void;
   @Input() elements: Elements = clone(defaultSettings);
   @Input() exerciceName = '';
+  @Input() isPreset = false;
+  @Input() forcePreset = false;
 
+  public preset?: ExercicePreset;
   public time = '04:00';
   public intervals = 16;
 
   private totalTime: number;
+  private previousActions: ComponentAction<Exercice>[] = [];
 
-  public constructor(private changeDetectorRef: ChangeDetectorRef) {}
+  public constructor(private changeDetectorRef: ChangeDetectorRef, private modalController: ModalController, private toastController: ToastController) {}
 
   public ngOnInit() {
+    if (!this.forcePreset) {
+      this.previousActions = this.actions;
+      this.updatePreset();
+    }
+
     this.update();
   }
 
@@ -116,6 +134,61 @@ export class ExerciceCreatorComponent implements OnInit {
     this.update();
   }
 
+  public applyPreset(preset: ExercicePreset) {
+    this.preset = preset;
+
+    if (!preset) { return; }
+
+    for (let i = 0; i < preset.elements.length; i++) {
+        this.elements[i] = clone(preset.elements[i]);
+    }
+
+    this.update();
+  }
+
+  public updatePreset() {
+    if (this.isPreset)
+    {
+      this.savePreviousActions();
+      this.actions.push({
+        name: 'SAVE PRESET',
+        action: (input: Exercice) => {
+          Storage.update('presets', (v) => v.push(input));
+          this.displaySaveToast();
+          this.isPreset = false;
+        }
+      });
+    }
+    else
+    {
+      this.restorePreviousActions();
+    }
+
+    this.changeDetectorRef.detectChanges();
+  }
+
+  async showPresets() {
+    const modal = await this.modalController.create({
+      component: ExercicePresetsComponent,
+      componentProps: {
+        back: () => modal.dismiss(),
+        action: (preset: ExercicePreset) => this.applyPreset(preset)
+      }
+    });
+
+    await modal.present();
+  }
+
+  private savePreviousActions() {
+    this.previousActions = clone(this.actions);
+    this.actions = [];
+  }
+
+  private restorePreviousActions() {
+    this.actions = clone(this.previousActions);
+    this.previousActions = [];
+  }
+
   private createExercice(): Exercice {
     return {
       name: this.exerciceName || 'Quick Exercice',
@@ -137,5 +210,15 @@ export class ExerciceCreatorComponent implements OnInit {
     this.time = toTime(this.totalTime);
     this.intervals = cycles * sets;
     this.changeDetectorRef.detectChanges();
+  }
+
+  private async displaySaveToast() {
+    const toast = await this.toastController.create({
+      message: `Your preset has been saved.`,
+      duration: 2000,
+      color: 'success'
+    });
+
+    await toast.present();
   }
 }

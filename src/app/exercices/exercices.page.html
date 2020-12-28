@@ -1,0 +1,72 @@
+<app-header></app-header>
+
+<ion-toolbar color="primary">
+  <ion-segment [(ngModel)]="currentTab">
+    <ion-segment-button value="exercices">
+      Exercices
+    </ion-segment-button>
+    <ion-segment-button value="presets">
+      Presets
+    </ion-segment-button>
+  </ion-segment>
+</ion-toolbar>
+
+<ion-content *ngIf="currentTab === 'exercices'">
+  <ion-list>
+    <ion-item-sliding *ngFor="let exercice of exercices; let i = index">
+      <ion-item style="border-bottom: solid 0.5px white;" color="secondary" lines="none" (click)="start(i)">
+        <ion-icon name="barbell-outline" style="font-size: 40px;"></ion-icon>
+        <ion-label style="text-align: center;">{{ exercice.name }}</ion-label>
+        <ion-chip outline color="light">
+          <ion-icon name="alarm-outline"></ion-icon>
+          <ion-label>{{ toTime(exercice.totalTime) }}</ion-label>
+        </ion-chip>
+      </ion-item>
+  
+      <ion-item-options side="end">
+        <ion-item-option color="warning" (click)="editExercice(i)">
+          <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="danger" (click)="removeExercice(i)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="primary">
+      <ion-icon name="add-outline" ></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+<ion-content *ngIf="currentTab === 'presets'">
+  <ion-list>
+    <ion-item-sliding *ngFor="let preset of presets; let i = index">
+      <ion-item style="border-bottom: solid 0.5px white;" color="secondary" lines="none">
+        <ion-icon name="barbell-outline" style="font-size: 40px;"></ion-icon>
+        <ion-label style="text-align: center;">{{ preset.name }}</ion-label>
+        <ion-chip outline style="color: white;">
+          <ion-icon name="cog-outline"></ion-icon>
+          <ion-label>{{ "PRESET" }}</ion-label>
+        </ion-chip>
+      </ion-item>
+  
+      <ion-item-options side="end">
+        <ion-item-option color="warning" (click)="editPreset(i)">
+          <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="danger" (click)="removePreset(i)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="primary">
+      <ion-icon name="add-outline" ></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+<app-footer></app-footer>

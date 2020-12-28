@@ -40,7 +40,7 @@ export class HomePage implements OnInit {
                 Storage.update('workouts', (v) => v.push(workout));
               }
 
-              this.displaySaveToast();
+              this.displaySaveToast('workout');
             },
           }
         ]
@@ -51,7 +51,9 @@ export class HomePage implements OnInit {
   }
 
   public async quickExercice() {
-      const modal = await this.modalController.create({
+    const index = Storage.exercices.length;
+
+    const modal = await this.modalController.create({
         component: ExerciceCreatorComponent,
         componentProps: {
           back: async () => await modal.dismiss(),
@@ -60,17 +62,29 @@ export class HomePage implements OnInit {
               name: 'START',
               action: (exercice: Exercice) => W.start(this.modalController, exercice),
               quit: true
+            },
+            {
+              name: 'SAVE',
+              action: (exerice: Exercice) => {
+                if (Storage.exercices.length > index) {
+                  Storage.update('exercices', (v) => (v[index] = exerice));
+                } else {
+                  Storage.update('exercices', (v) => v.push(exerice));
+                }
+
+                this.displaySaveToast('exercice');
+              },
             }
           ]
         }
       });
 
-      return await modal.present();
+    return await modal.present();
   }
 
-  private async displaySaveToast() {
+  private async displaySaveToast(type: 'workout' | 'exercice') {
     const toast = await this.toastController.create({
-      message: 'Your workout has been saved.',
+      message: `Your ${type} has been saved.`,
       duration: 2000,
       color: 'success'
     });

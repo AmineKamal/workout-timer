@@ -2,7 +2,7 @@
   <ion-toolbar color="secondary">
     <div style="display:flex;justify-content:space-around;width:100%;height:100%;align-items: center;padding-left: 10px;padding-right: 10px;">
       <ion-icon name="arrow-back-outline" (click)="back()"></ion-icon>
-      <ion-input placeholder="Enter Exercice Name" [(ngModel)]="exerciceName"></ion-input>
+      <ion-input [placeholder]="'Enter ' + (isPreset ? 'Preset' : 'Exercice') + ' Name'" [(ngModel)]="exerciceName"></ion-input>
       <ion-icon name="refresh-circle-outline" (click)="resetDefaults()"></ion-icon>
     </div>
   </ion-toolbar>
@@ -10,7 +10,21 @@
 
 <ion-content>
   <ion-list style="border-top: solid white 1px;">
-    <ion-item lines="full" *ngFor="let element of elements; let i = index;" button detail="false">
+    <ion-item lines="full">
+      <div style="width: 100%;height:100%;display: flex;justify-content: space-around;align-items: center;">
+        <ion-label *ngIf="!forcePreset" color="secondary">Preset</ion-label>
+        <ion-toggle *ngIf="!forcePreset" (ionChange)="updatePreset()" [(ngModel)]="isPreset" color="secondary"></ion-toggle>
+        <ion-label color="secondary">Custom Work</ion-label>
+        <ion-toggle color="secondary"></ion-toggle>
+      </div>
+    </ion-item>
+    <ion-item 
+      lines="full" 
+      *ngFor="let element of elements; let i = index;" 
+      button 
+      detail="false" 
+      [disabled]="preset && !preset.elements[i]?.presetConfigurable"
+    >
       <ion-avatar slot="start">
         <ion-icon [name]="element.icon" color="secondary"></ion-icon>
       </ion-avatar>
@@ -35,10 +49,6 @@
           </ion-datetime>
           <span *ngIf="!element.unit">{{element.value}}</span>
           <span *ngIf="element.unit === 'reps'">{{element.value > 0 ? element.value : ''}} {{ element.unit }}</span>
-          <!-- <span *ngIf="element.unit === 'reps'">
-            <input [(ngModel)]="element.value" style="border: none; width: 40px; text-align:center" type="number" (ngModelChange)="update()">reps
-          </span>
-          <input *ngIf="!element.unit" [(ngModel)]="element.value" style="border: none; width: 40px; text-align:center" type="number" (ngModelChange)="update()"> -->
           <ion-icon
             name="add-circle-outline"
             color="secondary"
@@ -46,6 +56,10 @@
           </ion-icon>
         </div>
       </ion-label>
+      <div *ngIf="isPreset || forcePreset" style="display: flex;flex-direction: column;align-items: center;">
+        <span style="font-size: 13px;margin-bottom: 5px;">Configurable</span>
+        <ion-toggle [(ngModel)]="element.presetConfigurable" color="secondary"></ion-toggle>
+      </div>
     </ion-item>
     <ion-item lines="full">
       <div style="display:flex;justify-content:space-around;width:100%">
@@ -63,7 +77,7 @@
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="secondary">
-      <ion-icon name="list-outline" ></ion-icon>
+      <ion-icon (click)="showPresets()" name="list-outline" ></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>

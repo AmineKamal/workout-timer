@@ -21,6 +21,11 @@ const routes: Routes = [
     path: 'workouts',
     loadChildren: () => import('./workouts/workouts.module').then( m => m.WorkoutsPageModule),
     canActivate: [Guard]
+  },
+  {
+    path: 'exercices',
+    loadChildren: () => import('./exercices/exercices.module').then( m => m.ExercicesPageModule),
+    canActivate: [Guard]
   }
 ];
 
