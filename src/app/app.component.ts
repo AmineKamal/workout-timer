@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { SwUpdate, UpdateAvailableEvent } from '@angular/service-worker';
+import { SwUpdate } from '@angular/service-worker';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +21,7 @@ export class AppComponent {
 
     updates.available.subscribe(async event => {
         await updates.activateUpdate();
-        this.updateApp(event);
+        this.updateApp();
     });
   }
 
@@ -32,8 +32,8 @@ export class AppComponent {
     });
   }
 
-  updateApp(ev: UpdateAvailableEvent) {
-    alert(`The app is updating from version ${ev.current} to version ${ev.available}`);
+  updateApp() {
+    alert(`The app is updating to a new version`);
     document.location.reload();
    }
 }
