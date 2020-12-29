@@ -15,11 +15,15 @@ export class LoadingPage implements OnInit {
   constructor(private router: Router) { }
 
   async ngOnInit() {
-    this.activateNoSleep();
-    this.activateSounds();
-    Storage.load();
+    this.activateUserDependencies();
+    document.addEventListener('visibilitychange', () => this.handleVisibilityChange, false);
     State.loaded.next(true);
     this.router.navigate(['home']);
+  }
+
+  private activateUserDependencies() {
+    this.activateNoSleep();
+    this.activateSounds();
   }
 
   private activateNoSleep() {
@@ -39,5 +43,11 @@ export class LoadingPage implements OnInit {
     };
 
     document.addEventListener('click', soundsEvent);
+  }
+
+  private handleVisibilityChange() {
+    if (!document.hidden) {
+      this.activateUserDependencies();
+    }
   }
 }
