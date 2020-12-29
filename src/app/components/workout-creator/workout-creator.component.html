@@ -3,11 +3,16 @@
       <div style="display:flex;justify-content:space-around;width:100%;height:100%;align-items: center;padding-left: 10px;padding-right: 10px;">
         <ion-icon name="arrow-back-outline" (click)="back()"></ion-icon>
         <ion-input [(ngModel)]="workoutName" placeholder="Enter Workout Name"></ion-input>
-        <ion-icon *ngIf="!activateReorder" name="move-outline" (click)="toggleReorder()" style="margin-right: 5px;"></ion-icon>
-        <ion-icon *ngIf="activateReorder" name="reorder-four-outline" (click)="toggleReorder()" style="margin-right: 5px;"></ion-icon>
-        <ion-icon name="add-circle-outline" (click)="createExercice()"></ion-icon>
       </div>
   </ion-toolbar>
+  <ion-toolbar color="tertiary" style="border-top: solid 1px white">
+    <div style="display:flex;justify-content:space-around;width:100%;height:100%;align-items: center;padding-left: 10px;padding-right: 10px;">
+      <ion-icon *ngIf="!activateReorder" name="move-outline" (click)="toggleReorder()" style="margin-right: 5px;"></ion-icon>
+      <ion-icon *ngIf="activateReorder" name="reorder-four-outline" (click)="toggleReorder()" style="margin-right: 5px;"></ion-icon>
+      <ion-icon name="list-outline" (click)="showExercices()"></ion-icon>
+      <ion-icon name="add-circle-outline" (click)="createExercice()"></ion-icon>
+    </div>
+</ion-toolbar>
 </ion-header>
 
 <ion-content>

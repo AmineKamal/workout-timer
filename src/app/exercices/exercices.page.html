@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<ion-toolbar color="primary">
+<ion-toolbar color="tertiary" style="border-top: solid white 1px;">
   <ion-segment [(ngModel)]="currentTab">
     <ion-segment-button value="exercices">
       Exercices
@@ -19,7 +19,7 @@
         <ion-label style="text-align: center;">{{ exercice.name }}</ion-label>
         <ion-chip outline color="light">
           <ion-icon name="alarm-outline"></ion-icon>
-          <ion-label>{{ toTime(exercice.totalTime) }}</ion-label>
+          <ion-label>{{ toTime(exercice.totalTime, true) }}</ion-label>
         </ion-chip>
       </ion-item>
   
@@ -34,7 +34,7 @@
     </ion-item-sliding>
   </ion-list>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="primary">
+    <ion-fab-button color="primary" (click)="addExercice()">
       <ion-icon name="add-outline" ></ion-icon>
     </ion-fab-button>
   </ion-fab>
@@ -46,8 +46,7 @@
       <ion-item style="border-bottom: solid 0.5px white;" color="secondary" lines="none">
         <ion-icon name="barbell-outline" style="font-size: 40px;"></ion-icon>
         <ion-label style="text-align: center;">{{ preset.name }}</ion-label>
-        <ion-chip outline style="color: white;">
-          <ion-icon name="cog-outline"></ion-icon>
+        <ion-chip outline>
           <ion-label>{{ "PRESET" }}</ion-label>
         </ion-chip>
       </ion-item>
@@ -63,7 +62,7 @@
     </ion-item-sliding>
   </ion-list>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="primary">
+    <ion-fab-button color="primary" (click)="addPreset()">
       <ion-icon name="add-outline" ></ion-icon>
     </ion-fab-button>
   </ion-fab>

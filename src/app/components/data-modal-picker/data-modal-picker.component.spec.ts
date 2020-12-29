@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { ExercicePresetsComponent } from './exercice-presets.component';
+import { DataModalPickerComponent } from './data-modal-picker.component';
 
-describe('ExercicePresetsComponent', () => {
-  let component: ExercicePresetsComponent;
-  let fixture: ComponentFixture<ExercicePresetsComponent>;
+describe('DataModalPickerComponent', () => {
+  let component: DataModalPickerComponent;
+  let fixture: ComponentFixture<DataModalPickerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExercicePresetsComponent ],
+      declarations: [ DataModalPickerComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ExercicePresetsComponent);
+    fixture = TestBed.createComponent(DataModalPickerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

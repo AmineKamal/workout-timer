@@ -3,7 +3,7 @@ import { ModalController, ToastController } from '@ionic/angular';
 import { Storage } from 'src/services/storage';
 import { clone, extract } from 'src/utils/object';
 import { parseTime, toTime } from 'src/utils/string';
-import { ExercicePresetsComponent } from '../exercice-presets/exercice-presets.component';
+import { DataModalPickerComponent } from '../data-modal-picker/data-modal-picker.component';
 import { ComponentAction } from '../types';
 
 export type WorkoutElementUnit = 's' | 'reps';
@@ -74,7 +74,7 @@ export class ExerciceCreatorComponent implements OnInit {
 
   public ngOnInit() {
     if (!this.forcePreset) {
-      this.previousActions = this.actions;
+      this.previousActions = [...this.actions];
       this.updatePreset();
     }
 
@@ -99,6 +99,7 @@ export class ExerciceCreatorComponent implements OnInit {
   }
 
   public run(i: number) {
+    console.log(this.actions);
     const { action, quit } = this.actions[i];
     action(this.createExercice());
 
@@ -169,10 +170,13 @@ export class ExerciceCreatorComponent implements OnInit {
 
   async showPresets() {
     const modal = await this.modalController.create({
-      component: ExercicePresetsComponent,
+      component: DataModalPickerComponent,
       componentProps: {
         back: () => modal.dismiss(),
-        action: (preset: ExercicePreset) => this.applyPreset(preset)
+        action: (preset: ExercicePreset) => this.applyPreset(preset),
+        title: 'Exercice Presets',
+        color: 'secondary',
+        data: Storage.presets
       }
     });
 
@@ -180,12 +184,12 @@ export class ExerciceCreatorComponent implements OnInit {
   }
 
   private savePreviousActions() {
-    this.previousActions = clone(this.actions);
+    this.previousActions = [...this.actions];
     this.actions = [];
   }
 
   private restorePreviousActions() {
-    this.actions = clone(this.previousActions);
+    this.actions = [...this.previousActions];
     this.previousActions = [];
   }
 

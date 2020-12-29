@@ -86,4 +86,41 @@ export class ExercicesPage implements OnInit {
   async start(i: number) {
     W.start(this.modalController, this.exercices[i]);
   }
+
+  async addExercice() {
+    const modal = await this.modalController.create({
+      component: ExerciceCreatorComponent,
+      componentProps: {
+        back: async () => await modal.dismiss(),
+        actions: [
+          {
+            name: 'CREATE',
+            action: (e: Exercice) => Storage.update('exercices', (v) => v.push(e)),
+            quit: true
+          }
+        ]
+      }
+    });
+
+    return await modal.present();
+  }
+
+  async addPreset() {
+    const modal = await this.modalController.create({
+      component: ExerciceCreatorComponent,
+      componentProps: {
+        back: async () => await modal.dismiss(),
+        actions: [
+          {
+            name: 'CREATE',
+            action: (preset: ExercicePreset) => Storage.update('presets', (v) => v.push(preset)),
+            quit: true
+          }
+        ],
+        forcePreset: true,
+      }
+    });
+
+    await modal.present();
+  }
 }

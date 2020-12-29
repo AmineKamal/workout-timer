@@ -6,18 +6,18 @@
       <ion-icon name="refresh-circle-outline" (click)="resetDefaults()"></ion-icon>
     </div>
   </ion-toolbar>
+  <ion-toolbar color="secondary" style="border-top:solid 1px white">
+    <div style="width: 100%;height:100%;display: flex;justify-content: space-around;align-items: center;">
+      <ion-label *ngIf="!forcePreset">Preset</ion-label>
+      <ion-toggle *ngIf="!forcePreset" (ionChange)="updatePreset()" [(ngModel)]="isPreset" color="tertiary"></ion-toggle>
+      <ion-label>Custom Work</ion-label>
+      <ion-toggle color="tertiary"></ion-toggle>
+    </div>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-list style="border-top: solid white 1px;">
-    <ion-item lines="full">
-      <div style="width: 100%;height:100%;display: flex;justify-content: space-around;align-items: center;">
-        <ion-label *ngIf="!forcePreset" color="secondary">Preset</ion-label>
-        <ion-toggle *ngIf="!forcePreset" (ionChange)="updatePreset()" [(ngModel)]="isPreset" color="secondary"></ion-toggle>
-        <ion-label color="secondary">Custom Work</ion-label>
-        <ion-toggle color="secondary"></ion-toggle>
-      </div>
-    </ion-item>
     <ion-item 
       lines="full" 
       *ngFor="let element of elements; let i = index;" 

@@ -6,6 +6,8 @@ import { toTime } from 'src/utils/string';
 import { Exercice, ExerciceCreatorComponent } from '../exercice-creator/exercice-creator.component';
 import { ComponentAction } from '../types';
 import { ItemReorderEventDetail } from '@ionic/core';
+import { DataModalPickerComponent } from '../data-modal-picker/data-modal-picker.component';
+import { Storage } from 'src/services/storage';
 
 export interface Workout {
   name: string;
@@ -93,6 +95,21 @@ export class WorkoutCreatorComponent implements OnInit {
 
   public toTime(time: number, ms = false) {
     return toTime(ms ? time / 1000 : time);
+  }
+
+  async showExercices() {
+    const modal = await this.modalController.create({
+      component: DataModalPickerComponent,
+      componentProps: {
+        back: () => modal.dismiss(),
+        action: (exercice: Exercice) => this.exercices.push(exercice),
+        title: 'Exercices',
+        color: 'secondary',
+        data: Storage.exercices
+      }
+    });
+
+    await modal.present();
   }
 
   private createWorkout() {
