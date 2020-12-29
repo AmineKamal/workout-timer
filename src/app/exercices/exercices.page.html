@@ -1,6 +1,4 @@
-<app-header></app-header>
-
-<ion-toolbar color="tertiary" style="border-top: solid white 1px;">
+<app-header>
   <ion-segment [(ngModel)]="currentTab">
     <ion-segment-button value="exercices">
       Exercices
@@ -9,10 +7,10 @@
       Presets
     </ion-segment-button>
   </ion-segment>
-</ion-toolbar>
+</app-header>
 
 <ion-content *ngIf="currentTab === 'exercices'">
-  <ion-list>
+  <ion-list style="border-top: solid white 1px;">
     <ion-item-sliding *ngFor="let exercice of exercices; let i = index">
       <ion-item style="border-bottom: solid 0.5px white;" color="secondary" lines="none" (click)="start(i)">
         <ion-icon name="barbell-outline" style="font-size: 40px;"></ion-icon>
