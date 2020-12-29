@@ -17,6 +17,7 @@ export class LoadingPage implements OnInit {
   async ngOnInit() {
     this.activateUserDependencies();
     document.addEventListener('visibilitychange', () => this.handleVisibilityChange, false);
+    Storage.load();
     State.loaded.next(true);
     this.router.navigate(['home']);
   }
