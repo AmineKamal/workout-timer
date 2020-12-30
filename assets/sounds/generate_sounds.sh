@@ -1,0 +1,1 @@
+audiosprite --path "." --output sounds -f howler *.mp3
