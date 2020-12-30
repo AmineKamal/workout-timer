@@ -16,7 +16,7 @@ export class LoadingPage implements OnInit {
 
   async ngOnInit() {
     this.activateUserDependencies();
-    document.addEventListener('visibilitychange', () => this.handleVisibilityChange, false);
+    document.addEventListener('visibilitychange', () => this.handleVisibilityChange(), false);
     Storage.load();
     State.loaded.next(true);
     this.router.navigate(['home']);
@@ -30,8 +30,7 @@ export class LoadingPage implements OnInit {
   private activateNoSleep() {
     const noSleepEvent = async () => {
       document.removeEventListener('click', noSleepEvent);
-      await noSleep.enable();
-      noSleep.disable();
+      await noSleep.restore();
     };
 
     document.addEventListener('click', noSleepEvent);

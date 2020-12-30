@@ -58,8 +58,19 @@ export const Sounds = new class
 
     public async load()
     {
-        this.sound = createSound();
-        this.sound.play();
+        if (!this.sound)
+        {
+            this.sound = createSound();
+        }
+        else
+        {
+            this.sound.unload();
+            this.sound.load();
+        }
+
+        try { this.sound.play(); }
+        catch {}
+
         console.log('Sounds have been enabled');
     }
 
