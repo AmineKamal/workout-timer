@@ -1,6 +1,6 @@
 import { Howl } from 'howler';
 
-const SOUNDS = ['short-beep', 'whistle', 'ding-sound', 'boxing-bell', 'countdown'] as const;
+const SOUNDS = ['short-beep', 'whistle', 'ding-sound', 'boxing-bell', 'countdown', 'bell'] as const;
 type SoundKey = typeof SOUNDS[number];
 
 const createSound: () => Howl = () =>
@@ -16,11 +16,30 @@ const createSound: () => Howl = () =>
         ],
         sprite:
         {
-          'boxing-bell': [0, 8249.04761904762],
-          countdown: [10000, 5476.213151927437],
-          'ding-sound': [17000, 2951.8367346938776],
-          'short-beep': [21000, 261.224489795918],
-          whistle: [23000, 1226.5986394557835]
+            bell: [
+              0,
+              2000
+            ],
+            'boxing-bell': [
+              3000,
+              8249.04761904762
+            ],
+            countdown: [
+              13000,
+              5476.213151927439
+            ],
+            'ding-sound': [
+              20000,
+              2951.8367346938776
+            ],
+            'short-beep': [
+              24000,
+              261.224489795918
+            ],
+            whistle: [
+              26000,
+              1226.5986394557835
+            ]
         }
       });
 };

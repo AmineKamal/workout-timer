@@ -18,6 +18,7 @@ import { Workout } from 'src/app/components/workout-creator/workout-creator.comp
 import { Exercice, WorkoutSettingElement } from '../exercice-creator/exercice-creator.component';
 import { CLickToContinue, clickToContinue } from 'src/services/events';
 import { CircleProgressComponent } from 'ng-circle-progress';
+import { wait } from 'src/utils/time';
 
 @Component({
   selector: 'app-timer',
@@ -205,7 +206,7 @@ export class TimerComponent implements OnInit {
 
       if (set < sets)
       {
-        Sounds.play('ding-sound');
+        Sounds.play('bell');
         await this.set(restSets, 'restSets');
       }
 
