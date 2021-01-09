@@ -26,6 +26,11 @@ const routes: Routes = [
     path: 'exercices',
     loadChildren: () => import('./exercices/exercices.module').then( m => m.ExercicesPageModule),
     canActivate: [Guard]
+  },
+  {
+    path: 'weight-tracker',
+    loadChildren: () => import('./weight-tracker/weight-tracker.module').then( m => m.WeightTrackerPageModule),
+    canActivate: [Guard]
   }
 ];
 

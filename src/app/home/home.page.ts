@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModalController, ToastController } from '@ionic/angular';
+import { Page, State } from 'src/services/state';
 import { Storage } from 'src/services/storage';
 import { Workout as W } from 'src/services/workout';
 import { clone } from 'src/utils/object';
@@ -14,7 +16,7 @@ import { WorkoutCreatorComponent, Workout } from '../components/workout-creator/
 })
 export class HomePage implements OnInit {
 
-  constructor(private modalController: ModalController, private toastController: ToastController) {}
+  constructor(private modalController: ModalController, private toastController: ToastController, private router: Router) {}
 
   ngOnInit() {}
 
@@ -80,6 +82,11 @@ export class HomePage implements OnInit {
       });
 
     return await modal.present();
+  }
+
+  public async goto(page: Page) {
+    State.currentPage.next(page);
+    this.router.navigate([page]);
   }
 
   private async displaySaveToast(type: 'workout' | 'exercice') {

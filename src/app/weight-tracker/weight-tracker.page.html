@@ -1,0 +1,96 @@
+<app-header>
+  <ion-title> Weight Tracker </ion-title>
+</app-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Weight</ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <ion-item lines="full">
+        <ion-label>Current Weight</ion-label>
+        <ion-label *ngIf="!this.hideWeight">{{ currentWeight }}</ion-label>
+        <ion-label *ngIf="this.hideWeight">{{ hiddenWeight }}</ion-label>
+        <ion-icon *ngIf="!this.hideWeight" name="eye-outline" color="primary" (click)="toggleHideWeight()"></ion-icon>
+        <ion-icon *ngIf="this.hideWeight" name="eye-off-outline" color="primary" (click)="toggleHideWeight()"></ion-icon>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-input placeholder="New Weight" type="number" [(ngModel)]="newWeight"></ion-input>
+        <ion-button slot="end" (click)="logWeight()"> Log Weight </ion-button>
+      </ion-item>
+    </ion-card-content>
+    
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Fat Loss</ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <ion-item lines="full">
+        <ion-label>Weekly Fat Loss target (%)</ion-label>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-input type="number" [(ngModel)]="lossPercent"></ion-input>
+        <ion-button slot="end" (click)="updateFatLoss()"> Update </ion-button>
+      </ion-item>
+    </ion-card-content>
+    
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Macros</ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content *ngIf="showMacroForm">
+      <ion-item lines="full">
+        <ion-label position="floating">Calories</ion-label>
+        <ion-input type="number" [(ngModel)]="macros.calories"></ion-input>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-label position="floating">Protein</ion-label>
+        <ion-input type="number" [(ngModel)]="macros.protein"></ion-input>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-label position="floating">Fat</ion-label>
+        <ion-input type="number" [(ngModel)]="macros.fat"></ion-input>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-label position="floating">Carbs</ion-label>
+        <ion-input type="number" [(ngModel)]="macros.carbs"></ion-input>
+      </ion-item>
+      <ion-item color="primary" button detail="false" (click)="logMacros()">
+        <div style="width: 100%;height: 100%;display: flex;justify-content: center;align-items: center;">Save Macros</div>
+      </ion-item>
+    </ion-card-content>
+
+    <ion-card-content *ngIf="!showMacroForm">
+      <ion-item lines="full">
+        <ion-label>Calories</ion-label>
+        <ion-label>{{ macros.calories }}</ion-label>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-label>Protein</ion-label>
+        <ion-label>{{ macros.protein }}</ion-label>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-label>Fat</ion-label>
+        <ion-label>{{ macros.fat }}</ion-label>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-label>Carbs</ion-label>
+        <ion-label>{{ macros.carbs }}</ion-label>
+      </ion-item>
+      <ion-item color="primary" button detail="false" (click)="forceUpdateMacroForm()">
+        <div style="width: 100%;height: 100%;display: flex;justify-content: center;align-items: center;">Update Macros</div>
+      </ion-item>
+    </ion-card-content>
+    
+  </ion-card>
+</ion-content>
+
+<app-footer></app-footer>
