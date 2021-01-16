@@ -1,11 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from 'src/services/storage';
+import { range, weightedAvg } from 'src/utils/array';
+import { extract } from 'src/utils/object';
+import { diffDates, stringifyJson } from 'src/utils/string';
 
 export interface Macros {
   protein: number;
   fat: number;
   carbs: number;
   calories: number;
+}
+
+export interface Weight {
+  weight: number;
+  date: string;
 }
 
 @Component({
@@ -19,6 +27,7 @@ export class WeightTrackerPage implements OnInit {
   showMacroForm = false;
   currentWeight: number | string;
   newWeight: number;
+  newWeightDate = new Date().toISOString();
   hideWeight: boolean;
 
   constructor() { }
@@ -28,7 +37,7 @@ export class WeightTrackerPage implements OnInit {
     this.macros = Storage.macros;
     const macros = this.macros;
     this.showMacroForm = !macros.calories || !macros.protein || !macros.fat || !macros.carbs;
-    this.currentWeight = Storage.weights[Storage.weights.length - 1] ?? '-';
+    this.currentWeight = Storage.weights[Storage.weights.length - 1]?.weight ?? '-';
     this.hideWeight = Storage.hideWeight;
   }
 
@@ -55,24 +64,30 @@ export class WeightTrackerPage implements OnInit {
   logWeight() {
     if (!this.newWeight) { return; }
 
-    const weight = this.newWeight;
+    Storage.update('weights', (v) => this.uniqueDatePush(v));
+    this.currentWeight = Storage.weights[Storage.weights.length - 1].weight;
+    this.newWeight = undefined;
+  }
+
+  macroUpdate() {
+    const previousWeights = this.fetchWeekWeights();
+    if (previousWeights.length <= 0) { return; }
+
     const macros = Storage.macros;
 
     if (macros.calories && macros.protein && macros.fat && macros.carbs) {
-      const previousWeight = Storage.weights[Storage.weights.length - 1];
+      const previousWeight = previousWeights[0].weight;
 
       if (previousWeight) {
         const expectedWeight = previousWeight - (this.lossPercent / 100) * previousWeight;
-        console.log(this.lossPercent, expectedWeight, previousWeight);
-        Storage.macros = this.adjustMacros(macros, expectedWeight, weight);
+        const newMacros = this.reajustMacros(macros, expectedWeight);
+        if (!newMacros) { return; }
+
+        Storage.macros = newMacros;
         Storage.save('macros');
         this.macros = Storage.macros;
       }
     }
-
-    Storage.update('weights', (v) => v.push(weight));
-    this.currentWeight = Storage.weights[Storage.weights.length - 1];
-    this.newWeight = undefined;
   }
 
   updateFatLoss() {
@@ -94,11 +109,24 @@ export class WeightTrackerPage implements OnInit {
     Storage.save('lossPercent');
   }
 
+  private reajustMacros(macros: Macros, expectedWeight: number, factor: number = 0)
+  {
+    const avgWeight = this.averageWeekWeight() + factor;
+    if (avgWeight > expectedWeight) { return undefined; }
+
+    const newMacros = this.adjustMacros(macros, expectedWeight, avgWeight);
+
+    if (!confirm(stringifyJson(newMacros)))
+    {
+      return this.reajustMacros(macros, expectedWeight, factor + 0.5);
+    }
+
+    return newMacros;
+  }
+
   private adjustMacros(macros: Macros, expectedWeight: number, actualWeight: number): Macros {
     const offset = expectedWeight - actualWeight;
     const { calories, protein, fat, carbs } = macros;
-
-    console.log(calories, offset);
     const newCalories = calories + offset * 500;
     const factor = newCalories / calories;
 
@@ -112,5 +140,38 @@ export class WeightTrackerPage implements OnInit {
       carbs: Math.round(newCarbs),
       protein: Math.round(newProtein)
     };
+  }
+
+  private fetchWeekWeights(): Weight[] {
+    if (Storage.weights.length < 1) { return []; }
+
+    const today = new Date().toISOString().substring(0, 10);
+    const weights: Weight[] = [];
+
+    for (let i = 0; i < Storage.weights.length - 1; i++) {
+      if (diffDates(today, Storage.weights[i].date) <= 7) {
+        weights.push(Storage.weights[i]);
+      }
+    }
+
+    console.log(weights);
+
+    return weights;
+  }
+
+  private averageWeekWeight() {
+    const weights = [...this.fetchWeekWeights().map(extract('weight')), this.currentWeight as number];
+
+    return weightedAvg(weights, 0.5, 1);
+  }
+
+  private uniqueDatePush(weights: Weight[]) {
+    const w = { weight: this.newWeight, date: this.newWeightDate.substring(0, 10) };
+    const i = weights.findIndex(({ date }) => date === this.newWeightDate);
+
+    if (i >= 0) { weights.splice(i, 1); }
+
+    weights.push(w);
+    weights.sort((a, b) => a.date.localeCompare(b.date));
   }
 }

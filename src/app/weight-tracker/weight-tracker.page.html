@@ -5,7 +5,10 @@
 <ion-content>
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Weight</ion-card-title>
+      <ion-card-title>
+        Weight 
+        <ion-icon style="float:right;" name="analytics-outline" color="primary" (click)="null"></ion-icon>
+      </ion-card-title>
     </ion-card-header>
   
     <ion-card-content>
@@ -18,7 +21,13 @@
       </ion-item>
       <ion-item lines="full">
         <ion-input placeholder="New Weight" type="number" [(ngModel)]="newWeight"></ion-input>
-        <ion-button slot="end" (click)="logWeight()"> Log Weight </ion-button>
+      </ion-item>
+      <ion-item>
+        <ion-label>Date</ion-label>
+        <ion-datetime [(ngModel)]="newWeightDate"></ion-datetime>
+      </ion-item>
+      <ion-item color="primary" button detail="false" (click)="logWeight()">
+        <div style="width: 100%;height: 100%;display: flex;justify-content: center;align-items: center;">Log Weight</div>
       </ion-item>
     </ion-card-content>
     
@@ -43,7 +52,10 @@
 
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Macros</ion-card-title>
+      <ion-card-title>
+        Macros
+        <ion-icon style="float:right;" name="refresh-outline" color="primary" (click)="macroUpdate()"></ion-icon>
+      </ion-card-title>
     </ion-card-header>
   
     <ion-card-content *ngIf="showMacroForm">

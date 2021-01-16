@@ -18,6 +18,7 @@ export class LoadingPage implements OnInit {
     this.activateUserDependencies();
     document.addEventListener('visibilitychange', () => this.handleVisibilityChange(), false);
     Storage.load();
+    Storage.currentMigration();
     State.loaded.next(true);
     this.router.navigate(['home']);
   }

@@ -1,18 +1,19 @@
 import { Exercice, ExercicePreset } from 'src/app/components/exercice-creator/exercice-creator.component';
 import { Workout } from 'src/app/components/workout-creator/workout-creator.component';
-import { Macros } from 'src/app/weight-tracker/weight-tracker.page';
+import { Macros, Weight } from 'src/app/weight-tracker/weight-tracker.page';
 
-const STORAGE_KEYS = ['workouts', 'presets', 'exercices', 'weights', 'macros', 'lossPercent', 'hideWeight'] as const;
+const STORAGE_KEYS = ['workouts', 'presets', 'exercices', 'weights', 'macros', 'lossPercent', 'hideWeight', 'triggerMigration'] as const;
 export type StorageKey = typeof STORAGE_KEYS[number];
 
 export const Storage = new class {
     public workouts: Workout[];
     public presets: ExercicePreset[];
     public exercices: Exercice[];
-    public weights: number[];
+    public weights: Weight[];
     public macros: Macros;
     public lossPercent: number;
     public hideWeight: boolean;
+    public triggerMigration: boolean;
 
     public load() {
         this.workouts = this.get('workouts', []);
@@ -22,6 +23,7 @@ export const Storage = new class {
         this.macros = this.get('macros', {} as Macros);
         this.lossPercent = this.get('lossPercent', 0.005);
         this.hideWeight = this.get('hideWeight', false);
+        this.triggerMigration = this.get('triggerMigration', true);
     }
 
     public update<K extends StorageKey, V extends this[K]>(key: K, f: (v: V) => void) {
@@ -29,8 +31,18 @@ export const Storage = new class {
         this.save(key);
     }
 
-    public save(key: StorageKey) {
-        this.set(key, this[key]);
+    public save(...keys: StorageKey[]) {
+        keys.forEach(key => this.set(key, this[key]));
+    }
+
+    public currentMigration()
+    {
+        if (this.triggerMigration)
+        {
+            this.weights = [];
+            this.triggerMigration = false;
+            this.save('weights', 'triggerMigration');
+        }
     }
 
     private set<T>(key: StorageKey, data: T) {
