@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from 'src/services/storage';
-import { range, weightedAvg } from 'src/utils/array';
+import { weightedAvg } from 'src/utils/array';
 import { extract } from 'src/utils/object';
 import { diffDates, stringifyJson } from 'src/utils/string';
 
@@ -29,6 +29,7 @@ export class WeightTrackerPage implements OnInit {
   newWeight: number;
   newWeightDate = new Date().toISOString();
   hideWeight: boolean;
+  weights = Storage.weights;
 
   constructor() { }
 

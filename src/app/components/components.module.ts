@@ -10,6 +10,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
 import { WorkoutCreatorComponent } from './workout-creator/workout-creator.component';
 import { ActionBarComponent } from './action-bar/action-bar.component';
 import { DataModalPickerComponent } from './data-modal-picker/data-modal-picker.component';
+import { ChartComponent } from './chart/chart.component';
 
 const COMPONENTS = [
     HeaderComponent,
@@ -18,7 +19,8 @@ const COMPONENTS = [
     ExerciceCreatorComponent,
     WorkoutCreatorComponent,
     TimerComponent,
-    DataModalPickerComponent
+    DataModalPickerComponent,
+    ChartComponent
 ];
 
 @NgModule({

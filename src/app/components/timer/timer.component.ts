@@ -58,6 +58,7 @@ export class TimerComponent implements OnInit {
   public activateControls = true;
   public clickToContinue = false;
   public reps: string;
+  public nextExercice: string;
 
   public get color() {
     if (this.currentElement === 'work') {
@@ -142,6 +143,7 @@ export class TimerComponent implements OnInit {
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.workout.exercices.length; i++)
     {
+      this.nextExercice = this.workout.exercices[i + 1]?.name;
       try { await this.doTimerWork(i); }
       catch { return; }
     }

@@ -61,8 +61,8 @@
 			</ion-button>
 		</div>
 	</ion-toolbar>
-	<ion-toolbar [color]="color">
-		<div style="width:100%; display:flex; justify-content: space-around; align-items: center; height: 100%;padding-top: 5px;">
+	<ion-toolbar [color]="color" [ngStyle]="{'border-bottom': nextExercice ? 'solid white 1px' : 'none'}">
+		<div style="width:100%; display:flex; justify-content: space-around; align-items: center; height: 100%;padding-top: 5px;padding-bottom: 5px;">
 			<div style="display:flex; flex-direction: column; align-items:center">
 				<span class="info-title">Elapsed</span><span class='info-data'>{{elapsed}}</span>
 			</div>
@@ -74,6 +74,13 @@
 			</div>
 			<div style="display:flex; flex-direction: column;align-items:center">
 				<span class="info-title">Remaining</span><span class="info-data">{{remaining}}</span>
+			</div>
+		</div>
+	</ion-toolbar>
+	<ion-toolbar [color]="color" *ngIf="nextExercice">
+		<div style="width:100%; display:flex; justify-content: space-around; align-items: center; height: 100%;padding-top: 5px;">
+			<div style="display:flex; flex-direction: column;align-items:center">
+				<span class="info-title">Next Exercice</span><span class="info-data">{{nextExercice}}</span>
 			</div>
 		</div>
 	</ion-toolbar>
