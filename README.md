@@ -2,4 +2,4 @@
 Simple app to do a quick home workout.
 
 # Demo
-![caption](demo.webp)
+<img src="demo.webp" width="45%" height="45%"/>
